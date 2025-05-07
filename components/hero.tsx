@@ -4,16 +4,12 @@ import { useEffect, useRef, useState, Fragment } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
-import { createChart, CrosshairMode } from "lightweight-charts"
 import { Menu, Transition } from "@headlessui/react"
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const chartContainerRef = useRef<HTMLDivElement>(null)
-  const [chart, setChart] = useState<any>(null)
-  const [candlestickSeries, setCandlestickSeries] = useState<any>(null)
   const [isFullScreen, setIsFullScreen] = useState(false)
-  const [prices, setPrices] = useState<{ BTC: string; ETH: string }>({ BTC: "Loading...", ETH: "Loading..." })
   const [timeRange, setTimeRange] = useState("7") // Default to 7 days (1 week)
 
   const timeRanges = [
@@ -110,113 +106,35 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    const fetchPrices = async () => {
-      try {
-        const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd")
-        const data = await response.json()
-        setPrices({
-          BTC: `$${data.bitcoin.usd.toLocaleString()}`,
-          ETH: `$${data.ethereum.usd.toLocaleString()}`,
-        })
-      } catch (error) {
-        console.error("Error fetching prices:", error)
-        setPrices({ BTC: "Error", ETH: "Error" })
-      }
-    }
-
-    fetchPrices()
-    const interval = setInterval(() => {
-      fetchPrices()
-    }, 60000) // Update every 60 seconds
-
-    return () => clearInterval(interval)
-  }, [])
-
-  useEffect(() => {
     if (!chartContainerRef.current) {
-      console.error("Chart container is not initialized.");
-      return;
+      console.error("Chart container is not initialized.")
+      return
     }
 
-    console.log("Initializing chart...");
-
-    const newChart = createChart(chartContainerRef.current, {
-      width: chartContainerRef.current.clientWidth,
-      height: 400,
-      layout: {
-        backgroundColor: "#1A202C",
-        textColor: "#E2E8F0",
-      },
-      grid: {
-        vertLines: { color: "#2D3748" },
-        horzLines: { color: "#2D3748" },
-      },
-      crosshair: {
-        mode: CrosshairMode.Normal,
-      },
-      priceScale: {
-        borderColor: "#2D3748",
-      },
-      timeScale: {
-        borderColor: "#2D3748",
-      },
-    });
-
-    console.log("Chart created:", newChart);
-
-    const series = newChart.addCandlestickSeries({
-      upColor: "#4CAF50",
-      downColor: "#F44336",
-      borderVisible: false,
-      wickUpColor: "#4CAF50",
-      wickDownColor: "#F44336",
-    });
-
-    console.log("Candlestick series added:", series);
-
-    setChart(newChart);
-    setCandlestickSeries(series);
+    // Initialize TradingView widget
+    const widget = new window.TradingView.widget({
+      container_id: chartContainerRef.current.id,
+      autosize: true,
+      symbol: "BTCUSD",
+      interval: "60", // Default to 1-hour interval
+      timezone: "Etc/UTC",
+      theme: "dark",
+      style: "1", // Candlestick chart
+      locale: "en",
+      toolbar_bg: "#1A202C",
+      enable_publishing: false,
+      allow_symbol_change: true,
+      studies: ["MACD@tv-basicstudies"], // Example indicator
+    })
 
     return () => {
-      console.log("Removing chart...");
-      newChart.remove();
-    };
-  }, []);
-
-  useEffect(() => {
-    const fetchCandlestickData = async () => {
-      if (!candlestickSeries) {
-        console.error("Candlestick series is not initialized.");
-        return;
-      }
-
-      try {
-        const response = await fetch(
-          `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=${timeRange}`
-        );
-        const data = await response.json();
-        const candlestickData = data.prices.map((price: [number, number]) => ({
-          time: Math.floor(price[0] / 1000),
-          open: price[1] * (1 - Math.random() * 0.01),
-          high: price[1] * (1 + Math.random() * 0.02),
-          low: price[1] * (1 - Math.random() * 0.02),
-          close: price[1],
-        }));
-        candlestickSeries.setData(candlestickData);
-      } catch (error) {
-        console.error("Error fetching candlestick data:", error);
-      }
-    };
-
-    fetchCandlestickData();
-  }, [timeRange, candlestickSeries]);
+      widget.remove()
+    }
+  }, [])
 
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen)
   }
-
-  console.log("chartContainerRef:", chartContainerRef.current);
-  console.log("chart:", chart);
 
   return (
     <section className="relative min-h-screen flex items-center pt-20">
@@ -337,6 +255,7 @@ export default function Hero() {
                 </div>
 
                 <div
+                  id="tradingview_chart"
                   ref={chartContainerRef}
                   className={`relative ${isFullScreen ? "h-full" : "h-64"} overflow-hidden`}
                 ></div>
