@@ -58,7 +58,7 @@ export default function Footer() {
               href="/"
               className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400 inline-block mb-4"
             >
-              copto.io
+              LUMENORI
             </Link>
             <p className="text-gray-400 mb-6 max-w-md">
               The next generation web3 trading platform with advanced analytics, minimal fees, and lightning-fast
@@ -98,7 +98,7 @@ export default function Footer() {
         <div className="mt-16 pt-8 border-t border-purple-500/20">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <p className="text-gray-400 text-sm mb-4 md:mb-0">
-              &copy; {new Date().getFullYear()} Copto.io. All rights reserved.
+              &copy; {new Date().getFullYear()} LUMENORI. All rights reserved.
             </p>
             <div className="flex space-x-6">
               <Link href="/legal/privacy" className="text-gray-400 hover:text-white text-sm transition-colors">
