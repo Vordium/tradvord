@@ -30,10 +30,10 @@ export default function Hero() {
     { label: "12H", value: "0.5" }, // 12 Hours
     { label: "4H", value: "0.1667" }, // 4 Hours
     { label: "1H", value: "0.0417" }, // 1 Hour
-    { label: "30M", value: "0.0208" }, // 30 Minutes
-    { label: "15M", value: "0.0104" }, // 15 Minutes
-    { label: "5M", value: "0.0035" }, // 5 Minutes
-    { label: "1M", value: "0.0017" }, // 1 Minute
+    { label: "30min", value: "0.0208" }, // 30 Minutes
+    { label: "15min", value: "0.0104" }, // 15 Minutes
+    { label: "5min", value: "0.0035" }, // 5 Minutes
+    { label: "1min", value: "0.0017" }, // 1 Minute
   ]
 
   useEffect(() => {
