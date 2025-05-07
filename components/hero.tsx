@@ -24,16 +24,16 @@ export default function Hero() {
   const [timeRange, setTimeRange] = useState("7") // Default to 7 days (1 week)
 
   const timeRanges = [
-    { label: "1 Month", value: "30" },
-    { label: "1 Week", value: "7" },
-    { label: "1 Day", value: "1" },
-    { label: "12 Hours", value: "0.5" },
-    { label: "4 Hours", value: "0.1667" },
-    { label: "1 Hour", value: "0.0417" },
-    { label: "30 Min", value: "0.0208" },
-    { label: "15 Min", value: "0.0104" },
-    { label: "5 Min", value: "0.0035" },
-    { label: "1 Min", value: "0.0017" },
+    { label: "1M", value: "30" }, // 1 Month
+    { label: "1W", value: "7" },  // 1 Week
+    { label: "1D", value: "1" },  // 1 Day
+    { label: "12H", value: "0.5" }, // 12 Hours
+    { label: "4H", value: "0.1667" }, // 4 Hours
+    { label: "1H", value: "0.0417" }, // 1 Hour
+    { label: "30M", value: "0.0208" }, // 30 Minutes
+    { label: "15M", value: "0.0104" }, // 15 Minutes
+    { label: "5M", value: "0.0035" }, // 5 Minutes
+    { label: "1M", value: "0.0017" }, // 1 Minute
   ]
 
   useEffect(() => {
