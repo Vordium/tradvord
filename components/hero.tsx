@@ -21,6 +21,20 @@ export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [prices, setPrices] = useState<{ BTC: string; ETH: string }>({ BTC: "Loading...", ETH: "Loading..." })
   const [btcChartData, setBtcChartData] = useState<{ labels: string[]; data: number[] }>({ labels: [], data: [] })
+  const [timeRange, setTimeRange] = useState("7") // Default to 7 days (1 week)
+
+  const timeRanges = [
+    { label: "1 Month", value: "30" },
+    { label: "1 Week", value: "7" },
+    { label: "1 Day", value: "1" },
+    { label: "12 Hours", value: "0.5" },
+    { label: "4 Hours", value: "0.1667" },
+    { label: "1 Hour", value: "0.0417" },
+    { label: "30 Min", value: "0.0208" },
+    { label: "15 Min", value: "0.0104" },
+    { label: "5 Min", value: "0.0035" },
+    { label: "1 Min", value: "0.0017" },
+  ]
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -112,11 +126,11 @@ export default function Hero() {
     const fetchBtcHistory = async () => {
       try {
         const response = await fetch(
-          "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7"
+          `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=${timeRange}`
         )
         const data = await response.json()
         const labels = data.prices.map((price: [number, number]) =>
-          new Date(price[0]).toLocaleDateString()
+          new Date(price[0]).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
         )
         const chartData = data.prices.map((price: [number, number]) => price[1])
         setBtcChartData({ labels, data: chartData })
@@ -133,7 +147,7 @@ export default function Hero() {
     }, 60000) // Update every 60 seconds
 
     return () => clearInterval(interval)
-  }, [])
+  }, [timeRange])
 
   return (
     <section className="relative min-h-screen flex items-center pt-20">
@@ -201,9 +215,19 @@ export default function Hero() {
                     Trading Dashboard
                   </div>
                   <div className="flex space-x-2">
-                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                    {timeRanges.map((range) => (
+                      <button
+                        key={range.value}
+                        onClick={() => setTimeRange(range.value)}
+                        className={`px-3 py-1 rounded-full text-sm ${
+                          timeRange === range.value
+                            ? "bg-purple-500 text-white"
+                            : "bg-gray-700 text-gray-300"
+                        }`}
+                      >
+                        {range.label}
+                      </button>
+                    ))}
                   </div>
                 </div>
 
@@ -213,13 +237,13 @@ export default function Hero() {
                       <div className="text-gray-300">BTC/USD</div>
                       <div className="text-green-400">{prices.BTC}</div>
                     </div>
-                    <div className="h-32 relative overflow-hidden">
+                    <div className="h-64 relative overflow-hidden">
                       <Line
                         data={{
                           labels: btcChartData.labels,
                           datasets: [
                             {
-                              label: "BTC Price (Last 7 Days)",
+                              label: "BTC Price",
                               data: btcChartData.data,
                               borderColor: "#9333ea",
                               backgroundColor: "rgba(147, 51, 234, 0.2)",
@@ -229,12 +253,12 @@ export default function Hero() {
                         }}
                         options={{
                           responsive: true,
-                          maintainAspectRatio: false, // Allow the chart to fill the container
+                          maintainAspectRatio: false,
                           plugins: {
                             legend: { display: false },
                           },
                           layout: {
-                            padding: 0, // Remove any padding
+                            padding: 0,
                           },
                           scales: {
                             x: { grid: { display: false } },
