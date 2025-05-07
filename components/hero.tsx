@@ -140,7 +140,6 @@ export default function Hero() {
 
     console.log("Initializing chart...");
 
-    // Create the chart
     const newChart = createChart(chartContainerRef.current, {
       width: chartContainerRef.current.clientWidth,
       height: 400,
@@ -165,7 +164,6 @@ export default function Hero() {
 
     console.log("Chart created:", newChart);
 
-    // Add the candlestick series
     const series = newChart.addCandlestickSeries({
       upColor: "#4CAF50",
       downColor: "#F44336",
@@ -179,7 +177,6 @@ export default function Hero() {
     setChart(newChart);
     setCandlestickSeries(series);
 
-    // Cleanup on unmount
     return () => {
       console.log("Removing chart...");
       newChart.remove();
@@ -188,14 +185,17 @@ export default function Hero() {
 
   useEffect(() => {
     const fetchCandlestickData = async () => {
-      if (!candlestickSeries) return; // Ensure the series is initialized
+      if (!candlestickSeries) {
+        console.error("Candlestick series is not initialized.");
+        return;
+      }
 
       try {
         const response = await fetch(
           `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=${timeRange}`
         );
         const data = await response.json();
-        const candlestickData = data.prices.map((price: [number, number], index: number) => ({
+        const candlestickData = data.prices.map((price: [number, number]) => ({
           time: Math.floor(price[0] / 1000),
           open: price[1] * (1 - Math.random() * 0.01),
           high: price[1] * (1 + Math.random() * 0.02),
