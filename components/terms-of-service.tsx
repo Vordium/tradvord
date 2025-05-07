@@ -45,5 +45,11 @@ export default function TermsOfService() {
                 <div className="p-3 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 mr-4">
                   <FileText className="h-6 w-6" />
                 </div>
-
-\
+              </div>
+            </motion.div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}

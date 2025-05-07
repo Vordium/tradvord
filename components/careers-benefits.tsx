@@ -68,6 +68,42 @@ export default function CareersBenefits() {
               <ul className="space-y-4">
                 <li className="flex items-start gap-3">
                   <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center shrink-0 mt-0.5">
-                    <svg xmlns="http://www.w3.org/2000/svg
-
-\
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Flexible Work Arrangements</h4>
+                    <p className="text-gray-400 text-sm">Work from anywhere, anytime</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center shrink-0 mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Professional Development</h4>
+                    <p className="text-gray-400 text-sm">Training and mentorship opportunities</p>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-600 to-pink-600 flex items-center justify-center shrink-0 mt-0.5">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-white">
+                      <path d="M20 6 9 17l-5-5" />
+                    </svg>
+                  </div>
+                  <div>
+                    <h4 className="font-semibold mb-1">Wellness Programs</h4>
+                    <p className="text-gray-400 text-sm">Mental health support and fitness initiatives</p>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
