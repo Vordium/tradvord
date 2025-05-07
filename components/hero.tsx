@@ -133,8 +133,9 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    if (!chartContainerRef.current) return
+    if (!chartContainerRef.current) return;
 
+    // Create the chart
     const newChart = createChart(chartContainerRef.current, {
       width: chartContainerRef.current.clientWidth,
       height: 400,
@@ -155,48 +156,50 @@ export default function Hero() {
       timeScale: {
         borderColor: "#2D3748",
       },
-    })
+    });
 
+    // Add the candlestick series
     const series = newChart.addCandlestickSeries({
       upColor: "#4CAF50",
       downColor: "#F44336",
       borderVisible: false,
       wickUpColor: "#4CAF50",
       wickDownColor: "#F44336",
-    })
+    });
 
-    setChart(newChart)
-    setCandlestickSeries(series)
+    setChart(newChart);
+    setCandlestickSeries(series);
 
+    // Cleanup on unmount
     return () => {
-      newChart.remove()
-    }
-  }, [])
+      newChart.remove();
+    };
+  }, []);
 
   useEffect(() => {
     const fetchCandlestickData = async () => {
+      if (!candlestickSeries) return; // Ensure the series is initialized
+
       try {
         const response = await fetch(
           `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=${timeRange}`
-        )
-        const data = await response.json()
+        );
+        const data = await response.json();
         const candlestickData = data.prices.map((price: [number, number], index: number) => ({
           time: Math.floor(price[0] / 1000),
           open: price[1] * (1 - Math.random() * 0.01),
           high: price[1] * (1 + Math.random() * 0.02),
           low: price[1] * (1 - Math.random() * 0.02),
           close: price[1],
-        }))
-        candlestickSeries.setData(candlestickData)
+        }));
+        candlestickSeries.setData(candlestickData);
       } catch (error) {
-        console.error("Error fetching candlestick data:", error)
+        console.error("Error fetching candlestick data:", error);
       }
-    }
+    };
 
-    if (candlestickSeries) {
-      fetchCandlestickData()
-    }
-  }, [timeRange, candlestickSeries])
+    fetchCandlestickData();
+  }, [timeRange, candlestickSeries]);
 
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen)
