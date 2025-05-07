@@ -8,7 +8,7 @@ import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 
 export const metadata: Metadata = {
-  title: "Careers | Copto",
+  title: "Careers | LUMENORI",
   description: "Join our team and help build the future of decentralized finance.",
 }
 

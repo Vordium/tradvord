@@ -6,7 +6,7 @@ import Navbar from "@/components/navbar"
 import Footer from "@/components/footer"
 
 export const metadata: Metadata = {
-  title: "Token Chat | copto.io",
+  title: "Token Chat | LUMENORI",
   description: "Join token-specific chat rooms to discuss cryptocurrencies with the community",
 }
 
