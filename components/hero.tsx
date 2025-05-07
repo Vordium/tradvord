@@ -229,8 +229,12 @@ export default function Hero() {
                         }}
                         options={{
                           responsive: true,
+                          maintainAspectRatio: false, // Allow the chart to fill the container
                           plugins: {
                             legend: { display: false },
+                          },
+                          layout: {
+                            padding: 0, // Remove any padding
                           },
                           scales: {
                             x: { grid: { display: false } },
