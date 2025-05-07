@@ -1,6 +1,6 @@
 "use client"
 
-import { useEffect, useRef, useState } from "react"
+import { useEffect, useRef, useState, Fragment } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
@@ -14,6 +14,7 @@ import {
   Tooltip,
   Legend,
 } from "chart.js"
+import { Menu, Transition } from "@headlessui/react"
 
 ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend)
 
@@ -35,6 +36,14 @@ export default function Hero() {
     { label: "5min", value: "0.0035" }, // 5 Minutes
     { label: "1min", value: "0.0017" }, // 1 Minute
   ]
+
+  const mainTimeRanges = timeRanges.filter((range) =>
+    ["1D", "12H", "4H", "1H", "30min", "15min", "5min"].includes(range.label)
+  )
+
+  const dropdownTimeRanges = timeRanges.filter((range) =>
+    ["1M", "1W", "1min"].includes(range.label)
+  )
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -214,8 +223,8 @@ export default function Hero() {
                   <div className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
                     Trading Dashboard
                   </div>
-                  <div className="flex space-x-2">
-                    {timeRanges.map((range) => (
+                  <div className="flex flex-wrap items-center space-x-2 mb-4">
+                    {mainTimeRanges.map((range) => (
                       <button
                         key={range.value}
                         onClick={() => setTimeRange(range.value)}
@@ -228,6 +237,38 @@ export default function Hero() {
                         {range.label}
                       </button>
                     ))}
+
+                    <Menu as="div" className="relative inline-block text-left">
+                      <Menu.Button className="px-3 py-1 rounded-full text-sm bg-gray-700 text-gray-300">
+                        More
+                      </Menu.Button>
+                      <Transition
+                        as={Fragment}
+                        enter="transition ease-out duration-100"
+                        enterFrom="transform opacity-0 scale-95"
+                        enterTo="transform opacity-100 scale-100"
+                        leave="transition ease-in duration-75"
+                        leaveFrom="transform opacity-100 scale-100"
+                        leaveTo="transform opacity-0 scale-95"
+                      >
+                        <Menu.Items className="absolute mt-2 w-28 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
+                          {dropdownTimeRanges.map((range) => (
+                            <Menu.Item key={range.value}>
+                              {({ active }) => (
+                                <button
+                                  onClick={() => setTimeRange(range.value)}
+                                  className={`${
+                                    active ? "bg-purple-500 text-white" : "text-gray-300"
+                                  } group flex w-full items-center px-3 py-2 text-sm`}
+                                >
+                                  {range.label}
+                                </button>
+                              )}
+                            </Menu.Item>
+                          ))}
+                        </Menu.Items>
+                      </Transition>
+                    </Menu>
                   </div>
                 </div>
 
