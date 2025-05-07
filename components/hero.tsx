@@ -111,24 +111,39 @@ export default function Hero() {
       return
     }
 
-    // Initialize TradingView widget
-    const widget = new window.TradingView.widget({
-      container_id: chartContainerRef.current.id,
-      autosize: true,
-      symbol: "BTCUSD",
-      interval: "60", // Default to 1-hour interval
-      timezone: "Etc/UTC",
-      theme: "dark",
-      style: "1", // Candlestick chart
-      locale: "en",
-      toolbar_bg: "#1A202C",
-      enable_publishing: false,
-      allow_symbol_change: true,
-      studies: ["MACD@tv-basicstudies"], // Example indicator
-    })
+    const initializeWidget = () => {
+      if (window.TradingView) {
+        new window.TradingView.widget({
+          container_id: chartContainerRef.current.id,
+          autosize: true,
+          symbol: "BTCUSD",
+          interval: "60", // Default to 1-hour interval
+          timezone: "Etc/UTC",
+          theme: "dark",
+          style: "1", // Candlestick chart
+          locale: "en",
+          toolbar_bg: "#1A202C",
+          enable_publishing: false,
+          allow_symbol_change: true,
+          studies: ["MACD@tv-basicstudies"], // Example indicator
+        })
+      } else {
+        console.error("TradingView widget is not available.")
+      }
+    }
 
-    return () => {
-      widget.remove()
+    if (window.TradingView) {
+      initializeWidget()
+    } else {
+      const script = document.createElement("script")
+      script.src = "https://s3.tradingview.com/tv.js"
+      script.async = true
+      script.onload = initializeWidget
+      document.body.appendChild(script)
+
+      return () => {
+        document.body.removeChild(script)
+      }
     }
   }, [])
 
