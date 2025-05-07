@@ -4,37 +4,29 @@ import { useEffect, useRef, useState, Fragment } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
-import { Line } from "react-chartjs-2"
-import {
-  Chart as ChartJS,
-  LineElement,
-  CategoryScale,
-  LinearScale,
-  PointElement,
-  Tooltip,
-  Legend,
-} from "chart.js"
+import { createChart, CrosshairMode } from "lightweight-charts"
 import { Menu, Transition } from "@headlessui/react"
-
-ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend)
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const chartContainerRef = useRef<HTMLDivElement>(null)
+  const [chart, setChart] = useState<any>(null)
+  const [candlestickSeries, setCandlestickSeries] = useState<any>(null)
+  const [isFullScreen, setIsFullScreen] = useState(false)
   const [prices, setPrices] = useState<{ BTC: string; ETH: string }>({ BTC: "Loading...", ETH: "Loading..." })
-  const [btcChartData, setBtcChartData] = useState<{ labels: string[]; data: number[] }>({ labels: [], data: [] })
   const [timeRange, setTimeRange] = useState("7") // Default to 7 days (1 week)
 
   const timeRanges = [
-    { label: "1M", value: "30" }, // 1 Month
-    { label: "1W", value: "7" },  // 1 Week
-    { label: "1D", value: "1" },  // 1 Day
-    { label: "12H", value: "0.5" }, // 12 Hours
-    { label: "4H", value: "0.1667" }, // 4 Hours
-    { label: "1H", value: "0.0417" }, // 1 Hour
-    { label: "30min", value: "0.0208" }, // 30 Minutes
-    { label: "15min", value: "0.0104" }, // 15 Minutes
-    { label: "5min", value: "0.0035" }, // 5 Minutes
-    { label: "1min", value: "0.0017" }, // 1 Minute
+    { label: "1M", value: "30" },
+    { label: "1W", value: "7" },
+    { label: "1D", value: "1" },
+    { label: "12H", value: "0.5" },
+    { label: "4H", value: "0.1667" },
+    { label: "1H", value: "0.0417" },
+    { label: "30min", value: "0.0208" },
+    { label: "15min", value: "0.0104" },
+    { label: "5min", value: "0.0035" },
+    { label: "1min", value: "0.0017" },
   ]
 
   const mainTimeRanges = timeRanges.filter((range) =>
@@ -132,31 +124,83 @@ export default function Hero() {
       }
     }
 
-    const fetchBtcHistory = async () => {
+    fetchPrices()
+    const interval = setInterval(() => {
+      fetchPrices()
+    }, 60000) // Update every 60 seconds
+
+    return () => clearInterval(interval)
+  }, [])
+
+  useEffect(() => {
+    if (!chartContainerRef.current) return
+
+    const newChart = createChart(chartContainerRef.current, {
+      width: chartContainerRef.current.clientWidth,
+      height: 400,
+      layout: {
+        backgroundColor: "#1A202C",
+        textColor: "#E2E8F0",
+      },
+      grid: {
+        vertLines: { color: "#2D3748" },
+        horzLines: { color: "#2D3748" },
+      },
+      crosshair: {
+        mode: CrosshairMode.Normal,
+      },
+      priceScale: {
+        borderColor: "#2D3748",
+      },
+      timeScale: {
+        borderColor: "#2D3748",
+      },
+    })
+
+    const series = newChart.addCandlestickSeries({
+      upColor: "#4CAF50",
+      downColor: "#F44336",
+      borderVisible: false,
+      wickUpColor: "#4CAF50",
+      wickDownColor: "#F44336",
+    })
+
+    setChart(newChart)
+    setCandlestickSeries(series)
+
+    return () => {
+      newChart.remove()
+    }
+  }, [])
+
+  useEffect(() => {
+    const fetchCandlestickData = async () => {
       try {
         const response = await fetch(
           `https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=${timeRange}`
         )
         const data = await response.json()
-        const labels = data.prices.map((price: [number, number]) =>
-          new Date(price[0]).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
-        )
-        const chartData = data.prices.map((price: [number, number]) => price[1])
-        setBtcChartData({ labels, data: chartData })
+        const candlestickData = data.prices.map((price: [number, number], index: number) => ({
+          time: Math.floor(price[0] / 1000),
+          open: price[1] * (1 - Math.random() * 0.01),
+          high: price[1] * (1 + Math.random() * 0.02),
+          low: price[1] * (1 - Math.random() * 0.02),
+          close: price[1],
+        }))
+        candlestickSeries.setData(candlestickData)
       } catch (error) {
-        console.error("Error fetching BTC history:", error)
+        console.error("Error fetching candlestick data:", error)
       }
     }
 
-    fetchPrices()
-    fetchBtcHistory()
-    const interval = setInterval(() => {
-      fetchPrices()
-      fetchBtcHistory()
-    }, 60000) // Update every 60 seconds
+    if (candlestickSeries) {
+      fetchCandlestickData()
+    }
+  }, [timeRange, candlestickSeries])
 
-    return () => clearInterval(interval)
-  }, [timeRange])
+  const toggleFullScreen = () => {
+    setIsFullScreen(!isFullScreen)
+  }
 
   return (
     <section className="relative min-h-screen flex items-center pt-20">
@@ -211,21 +255,23 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="relative"
+            className={`relative ${isFullScreen ? "fixed inset-0 z-50 bg-black" : ""}`}
           >
             <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-3xl blur-3xl"></div>
             <div className="relative bg-gradient-to-r from-purple-900/40 to-pink-900/40 backdrop-blur-xl rounded-3xl border border-purple-500/30 p-6 shadow-2xl">
-              <div className="absolute -top-10 -right-10 w-40 h-40 bg-cyan-500 rounded-full blur-3xl opacity-20"></div>
-              <div className="absolute -bottom-10 -left-10 w-40 h-40 bg-purple-500 rounded-full blur-3xl opacity-20"></div>
-
               <div className="relative z-10">
                 <div className="flex justify-between items-center mb-6">
                   <div className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
                     Trading Dashboard
                   </div>
+                  <button
+                    onClick={toggleFullScreen}
+                    className="px-3 py-1 rounded-full text-sm bg-gray-700 text-gray-300"
+                  >
+                    {isFullScreen ? "Exit Fullscreen" : "Expand Chart"}
+                  </button>
                 </div>
 
-                {/* Time ranges in a separate row */}
                 <div className="flex flex-wrap items-center space-x-2 mb-6">
                   {mainTimeRanges.map((range) => (
                     <button
@@ -274,88 +320,10 @@ export default function Hero() {
                   </Menu>
                 </div>
 
-                <div className="space-y-6">
-                  <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20">
-                    <div className="flex justify-between items-center mb-4">
-                      <div className="text-gray-300">BTC/USD</div>
-                      <div className="text-green-400">{prices.BTC}</div>
-                    </div>
-                    <div className="h-64 relative overflow-hidden">
-                      <Line
-                        data={{
-                          labels: btcChartData.labels,
-                          datasets: [
-                            {
-                              label: "BTC Price",
-                              data: btcChartData.data,
-                              borderColor: "#9333ea",
-                              backgroundColor: "rgba(147, 51, 234, 0.2)",
-                              tension: 0.4,
-                            },
-                          ],
-                        }}
-                        options={{
-                          responsive: true,
-                          maintainAspectRatio: false,
-                          plugins: {
-                            legend: { display: false },
-                          },
-                          layout: {
-                            padding: 0,
-                          },
-                          scales: {
-                            x: { grid: { display: false } },
-                            y: { grid: { display: false } },
-                          },
-                        }}
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20">
-                      <div className="text-sm text-gray-400">ETH/USD</div>
-                      <div className="text-xl font-bold text-white">{prices.ETH}</div>
-                    </div>
-                    <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20">
-                      <div className="text-sm text-gray-400">Volume 24h</div>
-                      <div className="text-xl font-bold text-white">$1.2B</div>
-                      <div className="text-green-400 text-sm">+12.5%</div>
-                    </div>
-                    <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20">
-                      <div className="text-sm text-gray-400">Market Cap</div>
-                      <div className="text-xl font-bold text-white">$42.5B</div>
-                      <div className="text-green-400 text-sm">+3.2%</div>
-                    </div>
-                  </div>
-
-                  <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20">
-                    <div className="flex justify-between items-center">
-                      <div className="text-sm text-gray-400">Your Portfolio</div>
-                      <div className="text-sm text-purple-400">View All</div>
-                    </div>
-                    <div className="mt-2 space-y-2">
-                      {[
-                        { coin: "BTC", amount: "1.2", value: "$45,230", change: "+2.4%" },
-                        { coin: "ETH", amount: "15.8", value: "$32,180", change: "+5.1%" },
-                      ].map((item, index) => (
-                        <div key={index} className="flex justify-between items-center">
-                          <div className="flex items-center">
-                            <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 mr-2"></div>
-                            <div>
-                              <div className="text-white">{item.coin}</div>
-                              <div className="text-xs text-gray-400">{item.amount}</div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="text-white">{item.value}</div>
-                            <div className="text-xs text-green-400">{item.change}</div>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
+                <div
+                  ref={chartContainerRef}
+                  className={`relative ${isFullScreen ? "h-full" : "h-64"} overflow-hidden`}
+                ></div>
               </div>
             </div>
           </motion.div>
