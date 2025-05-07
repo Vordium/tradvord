@@ -279,7 +279,7 @@ export default function TokenChatInterface() {
 
           <div className="flex flex-col items-end">
             <div className="flex items-center mb-1">
-              <span className="text-sm text-gray-400 mr-2">Community Sentiment:</span>
+              {/* <span className="text-sm text-gray-400 mr-2">Community Sentiment:</span> */}
               <div className="w-32 h-2 bg-gray-700 rounded-full overflow-hidden">
                 <div
                   className={`h-full ${
