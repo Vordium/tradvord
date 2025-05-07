@@ -22,7 +22,7 @@ export default function LegalDocuments() {
   const legalContent = {
     terms: {
       title: "Terms of Service",
-      description: "The terms and conditions governing your use of Copto.io services.",
+      description: "The terms and conditions governing your use of Lumenori Bot services.",
       icon: <FileText className="h-6 w-6" />,
       lastUpdated: "May 1, 2025",
       content: (
@@ -30,7 +30,7 @@ export default function LegalDocuments() {
           <section>
             <h3 className="text-xl font-bold mb-3">1. Introduction</h3>
             <p className="text-gray-300">
-              Welcome to Copto.so. These Terms of Service ("Terms") govern your access to and use of the Copto.so
+              Welcome to Lumenori Bot. These Terms of Service ("Terms") govern your access to and use of the Lumenori Bot
               website, mobile application, API, and all related services (collectively, the "Service"). By accessing or
               using the Service, you agree to be bound by these Terms.
             </p>
@@ -65,7 +65,7 @@ export default function LegalDocuments() {
               Service.
             </p>
             <p className="text-gray-300 mt-2">
-              Past performance is not indicative of future results. Copto.so does not provide investment advice, and
+              Past performance is not indicative of future results. Lumenori Bot does not provide investment advice, and
               nothing on the Service should be construed as investment advice.
             </p>
           </section>
@@ -73,7 +73,7 @@ export default function LegalDocuments() {
           <section>
             <h3 className="text-xl font-bold mb-3">5. Fees and Payments</h3>
             <p className="text-gray-300">
-              Copto.so charges fees for certain services as described on our Fees page. We reserve the right to change
+              Lumenori Bot charges fees for certain services as described on our Fees page. We reserve the right to change
               our fee structure at any time. Changes to fees will be posted on the Fees page and will take effect when
               posted.
             </p>
@@ -100,7 +100,7 @@ export default function LegalDocuments() {
           <section>
             <h3 className="text-xl font-bold mb-3">8. Contact Information</h3>
             <p className="text-gray-300">
-              If you have any questions about these Terms, please contact us at legal@copto.so.
+              If you have any questions about these Terms, please contact us at legal@lumenori.bot.
             </p>
           </section>
         </div>
@@ -108,7 +108,7 @@ export default function LegalDocuments() {
     },
     privacy: {
       title: "Privacy Policy",
-      description: "How Copto.io collects, uses, and protects your personal information.",
+      description: "How Lumenori Bot collects, uses, and protects your personal information.",
       icon: <Lock className="h-6 w-6" />,
       lastUpdated: "April 15, 2025",
       content: (
@@ -116,7 +116,7 @@ export default function LegalDocuments() {
           <section>
             <h3 className="text-xl font-bold mb-3">1. Introduction</h3>
             <p className="text-gray-300">
-              This Privacy Policy describes how Copto.so ("we", "our", or "us") collects, uses, and shares your personal
+              This Privacy Policy describes how Lumenori Bot ("we", "our", or "us") collects, uses, and shares your personal
               information when you use our website, mobile application, API, and all related services (collectively, the
               "Service").
             </p>
@@ -191,7 +191,7 @@ export default function LegalDocuments() {
               right to access, correct, delete, or restrict processing of your personal information.
             </p>
             <p className="text-gray-300 mt-2">
-              To exercise these rights, please contact us at privacy@copto.so. We will respond to your request within a
+              To exercise these rights, please contact us at privacy@lumenori.bot. We will respond to your request within a
               reasonable timeframe.
             </p>
           </section>
@@ -215,7 +215,7 @@ export default function LegalDocuments() {
           <section>
             <h3 className="text-xl font-bold mb-3">8. Contact Information</h3>
             <p className="text-gray-300">
-              If you have any questions about this Privacy Policy, please contact us at privacy@copto.so.
+              If you have any questions about this Privacy Policy, please contact us at privacy@lumenori.bot.
             </p>
           </section>
         </div>
@@ -230,7 +230,7 @@ export default function LegalDocuments() {
           <section>
             <h3 className="text-xl font-bold mb-3">1. Introduction</h3>
             <p className="text-gray-300">
-              This Cookie Policy explains how Copto.so ("we", "our", or "us") uses cookies and similar technologies on
+              This Cookie Policy explains how Lumenori Bot ("we", "our", or "us") uses cookies and similar technologies on
               our website, mobile application, and all related services (collectively, the "Service").
             </p>
           </section>
@@ -285,7 +285,7 @@ export default function LegalDocuments() {
           <section>
             <h3 className="text-xl font-bold mb-3">6. Contact Information</h3>
             <p className="text-gray-300">
-              If you have any questions about this Cookie Policy, please contact us at privacy@copto.so.
+              If you have any questions about this Cookie Policy, please contact us at privacy@lumenori.bot.
             </p>
           </section>
         </div>
@@ -300,7 +300,7 @@ export default function LegalDocuments() {
           <section>
             <h3 className="text-xl font-bold mb-3">1. Regulatory Compliance</h3>
             <p className="text-gray-300">
-              Copto.so is committed to complying with all applicable laws and regulations in the jurisdictions where we
+              Lumenori Bot is committed to complying with all applicable laws and regulations in the jurisdictions where we
               operate. This includes but is not limited to:
             </p>
             <ul className="list-disc pl-6 mt-2 space-y-2 text-gray-300">
@@ -329,7 +329,7 @@ export default function LegalDocuments() {
 
           <section>
             <h3 className="text-xl font-bold mb-3">3. Licenses and Registrations</h3>
-            <p className="text-gray-300">Copto.so holds the following licenses and registrations:</p>
+            <p className="text-gray-300">Lumenori Bot holds the following licenses and registrations:</p>
             <ul className="list-disc pl-6 mt-2 space-y-2 text-gray-300">
               <li>Money Services Business (MSB) registration with FinCEN (United States)</li>
               <li>Virtual Asset Service Provider (VASP) registration in applicable jurisdictions</li>
@@ -356,7 +356,7 @@ export default function LegalDocuments() {
             <h3 className="text-xl font-bold mb-3">5. Reporting Concerns</h3>
             <p className="text-gray-300">
               If you have any concerns about potential violations of laws, regulations, or our policies, please contact
-              our compliance team at compliance@copto.so.
+              our compliance team at compliance@lumenori.bot.
             </p>
           </section>
         </div>
@@ -371,7 +371,7 @@ export default function LegalDocuments() {
           <section>
             <h3 className="text-xl font-bold mb-3">1. Security Measures</h3>
             <p className="text-gray-300">
-              At Copto.so, we implement industry-leading security measures to protect your account and assets:
+              At Lumenori Bot, we implement industry-leading security measures to protect your account and assets:
             </p>
             <ul className="list-disc pl-6 mt-2 space-y-2 text-gray-300">
               <li>
@@ -443,7 +443,7 @@ export default function LegalDocuments() {
             <p className="text-gray-300">We recommend the following security best practices:</p>
             <ul className="list-disc pl-6 mt-2 space-y-2 text-gray-300">
               <li>Enable two-factor authentication (2FA)</li>
-              <li>Use a strong, unique password for your Copto.so account</li>
+              <li>Use a strong, unique password for your Lumenori Bot account</li>
               <li>Be vigilant against phishing attempts</li>
               <li>Keep your devices and software updated</li>
               <li>Use a password manager to generate and store strong passwords</li>
@@ -455,7 +455,7 @@ export default function LegalDocuments() {
             <h3 className="text-xl font-bold mb-3">5. Reporting Security Issues</h3>
             <p className="text-gray-300">
               If you discover a security vulnerability or suspect unauthorized access to your account, please contact
-              our security team immediately at security@copto.so.
+              our security team immediately at security@lumenori.bot.
             </p>
           </section>
         </div>
@@ -485,7 +485,7 @@ export default function LegalDocuments() {
           <section>
             <h3 className="text-xl font-bold mb-3">2. No Investment Advice</h3>
             <p className="text-gray-300">
-              Copto.so does not provide investment, tax, legal, or accounting advice. The information provided on our
+              Lumenori Bot does not provide investment, tax, legal, or accounting advice. The information provided on our
               platform is for general informational purposes only and is not intended to be, and should not be construed
               as, investment advice.
             </p>
@@ -513,11 +513,11 @@ export default function LegalDocuments() {
             <h3 className="text-xl font-bold mb-3">4. Third-Party Links and Services</h3>
             <p className="text-gray-300">
               Our Service may contain links to third-party websites or services that are not owned or controlled by
-              Copto.so. We have no control over, and assume no responsibility for, the content, privacy policies, or
+              Lumenori Bot. We have no control over, and assume no responsibility for, the content, privacy policies, or
               practices of any third-party websites or services.
             </p>
             <p className="text-gray-300 mt-2">
-              You acknowledge and agree that Copto.so shall not be responsible or liable, directly or indirectly, for
+              You acknowledge and agree that Lumenori Bot shall not be responsible or liable, directly or indirectly, for
               any damage or loss caused or alleged to be caused by or in connection with the use of or reliance on any
               such content, goods, or services available on or through any such websites or services.
             </p>
@@ -532,7 +532,7 @@ export default function LegalDocuments() {
             </p>
             <p className="text-gray-300 mt-2">
               You should verify all information before relying on it, and all decisions based on information contained
-              on Copto.so are your sole responsibility and we shall have no liability for such decisions.
+              on Lumenori Bot are your sole responsibility and we shall have no liability for such decisions.
             </p>
           </section>
         </div>

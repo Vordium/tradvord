@@ -11,21 +11,21 @@ export default function Testimonials() {
       role: "Professional Trader",
       image: "/1.svg?key=952em",
       content:
-        "Copto.io has completely transformed my trading experience. The platform's speed and advanced analytics give me an edge in the market that I've never had before.",
+        "Lumenori Bot has completely transformed my trading experience. The platform's speed and advanced analytics give me an edge in the market that I've never had before.",
     },
     {
       name: "Sarah Chen",
       role: "Crypto Investor",
       image: "/sarah.jpg?key=swce8",
       content:
-        "I've tried many trading platforms, but none compare to the user experience and features of Copto. The real-time insights have helped me make better decisions.",
+        "I've tried many trading platforms, but none compare to the user experience and features of Lumenori Bot. The real-time insights have helped me make better decisions.",
     },
     {
       name: "Michael Rodriguez",
       role: "DeFi Enthusiast",
       image: "/2.svg?key=rtku2",
       content:
-        "The security features and low fees make Copto.io stand out from other platforms. I can trade with confidence knowing my assets are protected.",
+        "The security features and low fees make Lumenori Bot stand out from other platforms. I can trade with confidence knowing my assets are protected.",
     },
   ]
 
