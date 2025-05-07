@@ -1,0 +1,118 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: 0 0% 0%;
+  --foreground: 0 0% 100%;
+  --card: 0 0% 3%;
+  --card-foreground: 0 0% 100%;
+  --popover: 0 0% 3%;
+  --popover-foreground: 0 0% 100%;
+  --primary: 267 100% 56%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --ring: 267 100% 56%;
+  --radius: 0.5rem;
+}
+
+body {
+  background-color: black;
+  color: white;
+}
+
+.shadow-glow-purple {
+  box-shadow: 0 0 15px 2px rgba(147, 51, 234, 0.5);
+}
+
+.bg-grid-pattern {
+  background-image: linear-gradient(to right, rgba(107, 33, 168, 0.1) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(107, 33, 168, 0.1) 1px, transparent 1px);
+  background-size: 50px 50px;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
+
+.shadow-glow-sm {
+  box-shadow: 0 0 10px 1px rgba(147, 51, 234, 0.3);
+}
+
+.shadow-glow-md {
+  box-shadow: 0 0 15px 2px rgba(147, 51, 234, 0.4);
+}
+
+.shadow-glow-lg {
+  box-shadow: 0 0 20px 5px rgba(147, 51, 234, 0.5);
+}
+
+.gradient-border {
+  position: relative;
+  border-radius: 0.5rem;
+  background-clip: padding-box;
+  border: 1px solid transparent;
+}
+
+.gradient-border::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: -1;
+  margin: -1px;
+  border-radius: inherit;
+  background: linear-gradient(to right, rgba(147, 51, 234, 0.5), rgba(236, 72, 153, 0.5));
+}
+
+.glass-effect {
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(147, 51, 234, 0.2);
+  border-radius: 0.5rem;
+}
+
+@layer base {
+  :root {
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 240 5.3% 26.1%;
+    --sidebar-primary: 240 5.9% 10%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 240 4.8% 95.9%;
+    --sidebar-accent-foreground: 240 5.9% 10%;
+    --sidebar-border: 220 13% 91%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  .dark {
+    --sidebar-background: 240 5.9% 10%;
+    --sidebar-foreground: 240 4.8% 95.9%;
+    --sidebar-primary: 224.3 76.3% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 240 3.7% 15.9%;
+    --sidebar-accent-foreground: 240 4.8% 95.9%;
+    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+  }
+}
