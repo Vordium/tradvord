@@ -16,18 +16,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
-        <header>
-          <nav>
-            <ul>
-              <li><a href="/">Home</a></li>
-              <li><a href="/trending">Trending</a></li>
-              <li><a href="/token-chat">Token Chat</a></li>
-            </ul>
-          </nav>
-        </header>
-        {children}
-      </body>
+      <body>{children}</body>
     </html>
   )
 }
