@@ -9,13 +9,13 @@
   --card-foreground: 0 0% 100%;
   --popover: 0 0% 3%;
   --popover-foreground: 0 0% 100%;
-  --primary: 267 100% 56%;
+  --primary: 220 90% 30%; /* Dark blue */
   --primary-foreground: 0 0% 100%;
   --secondary: 240 3.7% 15.9%;
   --secondary-foreground: 0 0% 98%;
   --muted: 240 3.7% 15.9%;
   --muted-foreground: 240 5% 64.9%;
-  --accent: 240 3.7% 15.9%;
+  --accent: 90 60% 40%;  /* Kiwi green */
   --accent-foreground: 0 0% 98%;
   --destructive: 0 62.8% 30.6%;
   --destructive-foreground: 0 0% 98%;
