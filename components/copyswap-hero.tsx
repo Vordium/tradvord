@@ -4,31 +4,9 @@ import { Button } from "@/components/ui/button"
 import { ArrowRight, TrendingUp, Shield, Zap } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
-import React, { useEffect, useState } from "react"
 
 export default function CopyswapHero() {
   const router = useRouter()
-  const [prices, setPrices] = useState<{ BTC: number; ETH: number }>({ BTC: 0, ETH: 0 })
-
-  useEffect(() => {
-    const fetchPrices = async () => {
-      try {
-        const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd")
-        const data = await response.json()
-        setPrices({
-          BTC: data.bitcoin.usd,
-          ETH: data.ethereum.usd,
-        })
-      } catch (error) {
-        console.error("Failed to fetch prices:", error)
-      }
-    }
-
-    fetchPrices()
-    const interval = setInterval(fetchPrices, 60000) // Refresh prices every 60 seconds
-
-    return () => clearInterval(interval)
-  }, [])
 
   const handleStartCopyTrading = () => {
     // Smooth scroll to traders section
@@ -108,11 +86,6 @@ export default function CopyswapHero() {
               <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
             </Button>
           </motion.div>
-
-          <div className="price-info mt-8">
-            <p className="text-xl text-gray-300">BTC/USD: ${prices.BTC.toLocaleString()}</p>
-            <p className="text-xl text-gray-300">ETH/USD: ${prices.ETH.toLocaleString()}</p>
-          </div>
         </div>
       </div>
     </section>
