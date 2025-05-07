@@ -44,6 +44,19 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+
+  .btn-gradient {
+    background: linear-gradient(90deg, hsl(220, 90%, 30%), hsl(90, 60%, 40%));
+    color: white;
+    border: none;
+    padding: 0.5rem 1rem;
+    border-radius: var(--radius);
+    transition: background 0.3s ease;
+  }
+
+  .btn-gradient:hover {
+    background: linear-gradient(90deg, hsl(90, 60%, 40%), hsl(220, 90%, 30%));
+  }
 }
 
 .shadow-glow-sm {
