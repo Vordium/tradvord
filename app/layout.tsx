@@ -2,8 +2,8 @@ import type { Metadata } from 'next'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'copto',
-  description: 'copto is a cutting-edge web3 trading platform for crypto enthusiasts',
+  title: 'vobit',
+  description: 'vobit is a cutting-edge web3 trading platform for crypto enthusiasts',
   icons: {
     icon: '/logo.jpg',
   }
@@ -16,7 +16,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <header>
+          <nav>
+            <ul>
+              <li><a href="/">Home</a></li>
+              <li><a href="/trending">Trending</a></li>
+              <li><a href="/token-chat">Token Chat</a></li>
+            </ul>
+          </nav>
+        </header>
+        {children}
+      </body>
     </html>
   )
 }
