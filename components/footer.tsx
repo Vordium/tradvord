@@ -14,7 +14,7 @@ export default function Footer() {
         { name: "CopySwap", href: "/copyswap" },
         { name: "Trending", href: "/trending" },
         { name: "Leaderboard", href: "/leaderboard" },
-        { name: "Wallet Reputation", href: "/wallet-reputation" },
+        { name: "Wallet Reputation", href: "/reputation" },
         { name: "Token Chat", href: "/token-chat" },
       ],
     },

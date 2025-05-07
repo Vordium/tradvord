@@ -56,7 +56,7 @@ export default function Navbar() {
             { name: "CopySwap", path: "/copyswap" },
             { name: "Trending", path: "/trending" },
             { name: "Leaderboard", path: "/leaderboard" },
-            { name: "Wallet Reputation", path: "/wallet-reputation" },
+            { name: "Wallet Reputation", path: "/reputation" },
             { name: "Token Chat", path: "/token-chat" },
           ].map((item, index) => (
             <motion.div
@@ -108,7 +108,7 @@ export default function Navbar() {
               { name: "CopySwap", path: "/copyswap" },
               { name: "Trending", path: "/trending" },
               { name: "Leaderboard", path: "/leaderboard" },
-              { name: "Wallet Reputation", path: "/wallet-reputation" },
+              { name: "Wallet Reputation", path: "/reputation" },
               { name: "Token Chat", path: "/token-chat" },
             ].map((item) => (
               <Link
