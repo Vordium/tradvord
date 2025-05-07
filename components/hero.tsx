@@ -133,7 +133,12 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    if (!chartContainerRef.current) return;
+    if (!chartContainerRef.current) {
+      console.error("Chart container is not initialized.");
+      return;
+    }
+
+    console.log("Initializing chart...");
 
     // Create the chart
     const newChart = createChart(chartContainerRef.current, {
@@ -158,6 +163,8 @@ export default function Hero() {
       },
     });
 
+    console.log("Chart created:", newChart);
+
     // Add the candlestick series
     const series = newChart.addCandlestickSeries({
       upColor: "#4CAF50",
@@ -167,11 +174,14 @@ export default function Hero() {
       wickDownColor: "#F44336",
     });
 
+    console.log("Candlestick series added:", series);
+
     setChart(newChart);
     setCandlestickSeries(series);
 
     // Cleanup on unmount
     return () => {
+      console.log("Removing chart...");
       newChart.remove();
     };
   }, []);
@@ -204,6 +214,9 @@ export default function Hero() {
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen)
   }
+
+  console.log("chartContainerRef:", chartContainerRef.current);
+  console.log("chart:", chart);
 
   return (
     <section className="relative min-h-screen flex items-center pt-20">
