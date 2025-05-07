@@ -45,17 +45,17 @@ export default function Navbar() {
             href="/"
             className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400"
           >
-            copto.io
+            LUMENORI BOT
           </Link>
         </motion.div>
 
         <div className="hidden md:flex items-center space-x-4">
           {[
             { name: "Home", path: "/" },
-            { name: "Swap", path: "/swap" },
-            { name: "CopySwap", path: "/copyswap" },
-            { name: "Trending", path: "/trending" },
-            { name: "Leaderboard", path: "/leaderboard" },
+            // { name: "Swap", path: "/swap" },
+            // { name: "CopySwap", path: "/copyswap" },
+            // { name: "Trending", path: "/trending" },
+            // { name: "Leaderboard", path: "/leaderboard" },
             { name: "Wallet Reputation", path: "/reputation" },
             { name: "Token Chat", path: "/token-chat" },
           ].map((item, index) => (
@@ -104,10 +104,10 @@ export default function Navbar() {
           <div className="container mx-auto px-4 py-4 flex flex-col space-y-4">
             {[
               { name: "Home", path: "/" },
-              { name: "Swap", path: "/swap" },
-              { name: "CopySwap", path: "/copyswap" },
-              { name: "Trending", path: "/trending" },
-              { name: "Leaderboard", path: "/leaderboard" },
+              // { name: "Swap", path: "/swap" },
+              // { name: "CopySwap", path: "/copyswap" },
+              // { name: "Trending", path: "/trending" },
+              // { name: "Leaderboard", path: "/leaderboard" },
               { name: "Wallet Reputation", path: "/reputation" },
               { name: "Token Chat", path: "/token-chat" },
             ].map((item) => (
