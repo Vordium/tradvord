@@ -4,10 +4,23 @@ import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
+import { Line } from "react-chartjs-2"
+import {
+  Chart as ChartJS,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  Tooltip,
+  Legend,
+} from "chart.js"
+
+ChartJS.register(LineElement, CategoryScale, LinearScale, PointElement, Tooltip, Legend)
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const [prices, setPrices] = useState<{ BTC: string; ETH: string }>({ BTC: "Loading...", ETH: "Loading..." })
+  const [btcChartData, setBtcChartData] = useState<{ labels: string[]; data: number[] }>({ labels: [], data: [] })
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -96,8 +109,28 @@ export default function Hero() {
       }
     }
 
+    const fetchBtcHistory = async () => {
+      try {
+        const response = await fetch(
+          "https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7"
+        )
+        const data = await response.json()
+        const labels = data.prices.map((price: [number, number]) =>
+          new Date(price[0]).toLocaleDateString()
+        )
+        const chartData = data.prices.map((price: [number, number]) => price[1])
+        setBtcChartData({ labels, data: chartData })
+      } catch (error) {
+        console.error("Error fetching BTC history:", error)
+      }
+    }
+
     fetchPrices()
-    const interval = setInterval(fetchPrices, 60000) // Update every 60 seconds
+    fetchBtcHistory()
+    const interval = setInterval(() => {
+      fetchPrices()
+      fetchBtcHistory()
+    }, 60000) // Update every 60 seconds
 
     return () => clearInterval(interval)
   }, [])
@@ -181,21 +214,30 @@ export default function Hero() {
                       <div className="text-green-400">{prices.BTC}</div>
                     </div>
                     <div className="h-32 relative overflow-hidden">
-                      <svg viewBox="0 0 400 100" className="w-full h-full">
-                        <path
-                          d="M0,50 C50,30 100,70 150,50 C200,30 250,60 300,40 C350,20 400,50 400,50"
-                          fill="none"
-                          stroke="url(#gradient)"
-                          strokeWidth="2"
-                        />
-                        <defs>
-                          <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
-                            <stop offset="0%" stopColor="#9333ea" />
-                            <stop offset="100%" stopColor="#ec4899" />
-                          </linearGradient>
-                        </defs>
-                      </svg>
-                      <div className="absolute bottom-0 left-0 right-0 h-1/2 bg-gradient-to-t from-purple-500/20 to-transparent"></div>
+                      <Line
+                        data={{
+                          labels: btcChartData.labels,
+                          datasets: [
+                            {
+                              label: "BTC Price (Last 7 Days)",
+                              data: btcChartData.data,
+                              borderColor: "#9333ea",
+                              backgroundColor: "rgba(147, 51, 234, 0.2)",
+                              tension: 0.4,
+                            },
+                          ],
+                        }}
+                        options={{
+                          responsive: true,
+                          plugins: {
+                            legend: { display: false },
+                          },
+                          scales: {
+                            x: { grid: { display: false } },
+                            y: { grid: { display: false } },
+                          },
+                        }}
+                      />
                     </div>
                   </div>
 
