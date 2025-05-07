@@ -34,7 +34,28 @@ const NavigationMenuList = React.forwardRef<
       className
     )}
     {...props}
-  />
+  >
+    {/* Home */}
+    <NavigationMenuPrimitive.Item>
+      <NavigationMenuPrimitive.Link href="/" className="px-4 py-2">
+        Home
+      </NavigationMenuPrimitive.Link>
+    </NavigationMenuPrimitive.Item>
+
+    {/* Wallet Reputation */}
+    <NavigationMenuPrimitive.Item>
+      <NavigationMenuPrimitive.Link href="/wallet-reputation" className="px-4 py-2">
+        Wallet Reputation
+      </NavigationMenuPrimitive.Link>
+    </NavigationMenuPrimitive.Item>
+
+    {/* Token Chat */}
+    <NavigationMenuPrimitive.Item>
+      <NavigationMenuPrimitive.Link href="/token-chat" className="px-4 py-2">
+        Token Chat
+      </NavigationMenuPrimitive.Link>
+    </NavigationMenuPrimitive.Item>
+  </NavigationMenuPrimitive.List>
 ))
 NavigationMenuList.displayName = NavigationMenuPrimitive.List.displayName
 
