@@ -1,12 +1,13 @@
 "use client"
 
-import { useEffect, useRef } from "react"
+import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
+  const [prices, setPrices] = useState<{ BTC: string; ETH: string }>({ BTC: "Loading...", ETH: "Loading..." })
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -78,6 +79,27 @@ export default function Hero() {
 
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
+  useEffect(() => {
+    const fetchPrices = async () => {
+      try {
+        const response = await fetch("https://api.coingecko.com/api/v3/simple/price?ids=bitcoin,ethereum&vs_currencies=usd")
+        const data = await response.json()
+        setPrices({
+          BTC: `$${data.bitcoin.usd.toLocaleString()}`,
+          ETH: `$${data.ethereum.usd.toLocaleString()}`,
+        })
+      } catch (error) {
+        console.error("Error fetching prices:", error)
+        setPrices({ BTC: "Error", ETH: "Error" })
+      }
+    }
+
+    fetchPrices()
+    const interval = setInterval(fetchPrices, 60000) // Update every 60 seconds
+
+    return () => clearInterval(interval)
   }, [])
 
   return (
@@ -156,7 +178,7 @@ export default function Hero() {
                   <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20">
                     <div className="flex justify-between items-center mb-4">
                       <div className="text-gray-300">BTC/USD</div>
-                      <div className="text-green-400">+5.34%</div>
+                      <div className="text-green-400">{prices.BTC}</div>
                     </div>
                     <div className="h-32 relative overflow-hidden">
                       <svg viewBox="0 0 400 100" className="w-full h-full">
@@ -178,6 +200,10 @@ export default function Hero() {
                   </div>
 
                   <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20">
+                      <div className="text-sm text-gray-400">ETH/USD</div>
+                      <div className="text-xl font-bold text-white">{prices.ETH}</div>
+                    </div>
                     <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20">
                       <div className="text-sm text-gray-400">Volume 24h</div>
                       <div className="text-xl font-bold text-white">$1.2B</div>
