@@ -174,7 +174,10 @@ export default function Hero() {
         }`}
         style={isFullScreen ? { width: "100vw", height: "100vh", padding: 0, margin: 0 } : {}}
       >
-        <div className={`grid ${isFullScreen ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2"} gap-12 items-center`}>
+        <div
+          className={`grid ${isFullScreen ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2"} gap-12 items-center`}
+          style={isFullScreen ? { height: "100%" } : {}}
+        >
           {!isFullScreen && (
             <motion.div
               initial={{ opacity: 0, x: -50 }}
@@ -245,14 +248,15 @@ export default function Hero() {
                   id="tradingview_chart"
                   ref={chartContainerRef}
                   className={`relative ${
-                    isFullScreen ? "h-full w-full mb-5" : "h-64"
+                    isFullScreen ? "h-full w-full" : "h-64"
                   } overflow-hidden ${isFullScreen ? "rounded-none" : "rounded-3xl"}`}
                   style={
                     isFullScreen
                       ? {
-                          height: "calc(100vh - 60px)", // Adjust height to account for margin
+                          height: "calc(100vh - 20px)", // Ensure the container card touches the bottom of the screen
                           width: "calc(100vw - 40px)", // Maintain equal margin on both sides
                           margin: "20px auto", // Center the chart with margins
+                          paddingBottom: "20px", // Add margin between the chart and the container border
                           overflow: "hidden",
                         }
                       : {}
