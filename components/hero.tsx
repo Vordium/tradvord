@@ -208,6 +208,7 @@ export default function Hero() {
                   id="tradingview_chart"
                   ref={chartContainerRef}
                   className={`relative ${isFullScreen ? "h-full w-full" : "h-64"} overflow-hidden`}
+                  style={isFullScreen ? { height: "100vh", width: "100vw" } : {}}
                 ></div>
               </div>
             </div>
