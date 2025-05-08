@@ -172,7 +172,7 @@ export default function Hero() {
         className={`${
           isFullScreen ? "fixed inset-0 z-50 bg-black overflow-hidden" : "container mx-auto px-4 z-10 py-20"
         }`}
-        style={isFullScreen ? { width: "100vw", height: "calc(100vh - 20px)", padding: 0, margin: "0 auto" } : {}}
+        style={isFullScreen ? { width: "100vw", height: "100vh", padding: 0, margin: 0 } : {}}
       >
         <div className={`grid ${isFullScreen ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2"} gap-12 items-center`}>
           {!isFullScreen && (
@@ -245,12 +245,12 @@ export default function Hero() {
                   id="tradingview_chart"
                   ref={chartContainerRef}
                   className={`relative ${
-                    isFullScreen ? "h-full w-full" : "h-64"
+                    isFullScreen ? "h-full w-full mb-5" : "h-64"
                   } overflow-hidden ${isFullScreen ? "rounded-none" : "rounded-3xl"}`}
                   style={
                     isFullScreen
                       ? {
-                          height: "calc(100vh - 40px)", // Maintain bottom margin
+                          height: "calc(100vh - 60px)", // Adjust height to account for margin
                           width: "calc(100vw - 40px)", // Maintain equal margin on both sides
                           margin: "20px auto", // Center the chart with margins
                           overflow: "hidden",
