@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { ArrowRight } from "lucide-react"
+import { ArrowRight, Maximize2, Minimize2 } from "lucide-react" // Import icons for fullscreen toggle
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -238,9 +238,13 @@ export default function Hero() {
                   </div>
                   <button
                     onClick={toggleFullScreen}
-                    className="px-3 py-1 rounded-full text-sm bg-gray-700 text-gray-300"
+                    className="px-3 py-1 rounded-full text-sm bg-gray-700 text-gray-300 flex items-center"
                   >
-                    {isFullScreen ? "Exit Fullscreen" : "Expand Chart"}
+                    {isFullScreen ? (
+                      <Minimize2 className="h-5 w-5" /> // Icon for exiting fullscreen
+                    ) : (
+                      <Maximize2 className="h-5 w-5" /> // Icon for expanding fullscreen
+                    )}
                   </button>
                 </div>
 
@@ -253,10 +257,9 @@ export default function Hero() {
                   style={
                     isFullScreen
                       ? {
-                          height: "calc(100vh - 20px)", // Ensure the container card touches the bottom of the screen
+                          height: "calc(100vh - 40px)", // Double the bottom margin
                           width: "calc(100vw - 40px)", // Maintain equal margin on both sides
-                          margin: "20px auto", // Center the chart with margins
-                          paddingBottom: "20px", // Add margin between the chart and the container border
+                          margin: "40px auto", // Center the chart with margins
                           overflow: "hidden",
                         }
                       : {}
