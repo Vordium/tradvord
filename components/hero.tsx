@@ -251,7 +251,11 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative"
           >
-            <div className="relative bg-gradient-to-r from-purple-900/40 to-pink-900/40 backdrop-blur-xl border border-purple-500/30 p-6 shadow-2xl">
+            <div
+              className={`relative bg-gradient-to-r from-purple-900/40 to-pink-900/40 backdrop-blur-xl border border-purple-500/30 p-6 shadow-2xl ${
+                isFullScreen ? "rounded-none" : "rounded-3xl"
+              }`}
+            >
               <div className="relative z-10">
                 <div className="flex justify-between items-center mb-6">
                   <div className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
@@ -259,7 +263,7 @@ export default function Hero() {
                   </div>
                   <button
                     onClick={toggleFullScreen}
-                    className="px-3 py-1 rounded-full text-sm bg-gray-700 text-gray-300 flex items-center"
+                    className="px-3 py-1 rounded-[3px] text-sm bg-gray-700 text-gray-300 flex items-center border border-gray-500"
                   >
                     {isFullScreen ? (
                       <Minimize2 className="h-5 w-5" />
@@ -278,9 +282,9 @@ export default function Hero() {
                   style={
                     isFullScreen
                       ? {
-                          height: "calc(100vh - 40px)",
-                          width: "calc(100vw - 40px)",
-                          margin: "40px auto",
+                          height: "calc(100vh - 60px)", // Equal margin from top, bottom, left, and right
+                          width: "calc(100vw - 60px)",
+                          margin: "30px auto", // Center the chart
                           overflow: "hidden",
                         }
                       : {}
