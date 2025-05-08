@@ -9,6 +9,7 @@ export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const chartContainerRef = useRef<HTMLDivElement>(null)
   const [isFullScreen, setIsFullScreen] = useState(false)
+  const [portfolio, setPortfolio] = useState<{ coin: string; amount: number; price: string }[]>([])
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -128,6 +129,42 @@ export default function Hero() {
     setIsFullScreen(!isFullScreen)
   }
 
+  const fetchPortfolioPrices = async () => {
+    if (portfolio.length === 0) return
+
+    try {
+      const ids = portfolio.map((item) => item.coin).join(",")
+      const response = await fetch(
+        `https://api.coingecko.com/api/v3/simple/price?ids=${ids}&vs_currencies=usd`
+      )
+      const data = await response.json()
+
+      setPortfolio((prevPortfolio) =>
+        prevPortfolio.map((item) => ({
+          ...item,
+          price: data[item.coin]?.usd ? `$${data[item.coin].usd.toFixed(2)}` : "N/A",
+        }))
+      )
+    } catch (error) {
+      console.error("Error fetching portfolio prices:", error)
+    }
+  }
+
+  useEffect(() => {
+    fetchPortfolioPrices()
+    const interval = setInterval(fetchPortfolioPrices, 60000) // Update prices every 60 seconds
+    return () => clearInterval(interval)
+  }, [portfolio])
+
+  const addToPortfolio = (coin: string) => {
+    if (portfolio.find((item) => item.coin === coin)) return
+    setPortfolio([...portfolio, { coin, amount: 0, price: "Loading..." }])
+  }
+
+  const removeFromPortfolio = (coin: string) => {
+    setPortfolio(portfolio.filter((item) => item.coin !== coin))
+  }
+
   return (
     <section className="relative min-h-screen flex items-center pt-20">
       <canvas ref={canvasRef} className="absolute inset-0 z-0" style={{ pointerEvents: "none" }} />
@@ -225,6 +262,30 @@ export default function Hero() {
             </div>
           </motion.div>
         </div>
+
+        {/* Portfolio Section */}
+        {!isFullScreen && (
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+            {portfolio.map((item) => (
+              <div
+                key={item.coin}
+                className="bg-black/50 rounded-xl p-4 border border-purple-500/20 flex justify-between items-center"
+              >
+                <div>
+                  <div className="text-white">{item.coin.toUpperCase()}</div>
+                  <div className="text-sm text-gray-400">Amount: {item.amount}</div>
+                  <div className="text-sm text-gray-400">Price: {item.price}</div>
+                </div>
+                <Button
+                  onClick={() => removeFromPortfolio(item.coin)}
+                  className="bg-red-600 text-white text-sm px-4 py-2"
+                >
+                  Remove
+                </Button>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   )
