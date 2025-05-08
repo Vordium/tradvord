@@ -263,7 +263,7 @@ export default function Hero() {
                   </div>
                   <button
                     onClick={toggleFullScreen}
-                    className="px-3 py-1 rounded-[3px] text-sm bg-gray-700 text-gray-300 flex items-center border border-gray-500"
+                    className="px-3 py-1 rounded-[3px] text-sm bg-gradient-to-r from-gray-800 to-gray-900 text-gray-300 flex items-center border border-gray-500"
                   >
                     {isFullScreen ? (
                       <Minimize2 className="h-5 w-5" />
