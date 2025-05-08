@@ -131,51 +131,58 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center pt-20">
       <canvas ref={canvasRef} className="absolute inset-0 z-0" style={{ pointerEvents: "none" }} />
-      <div className={`container mx-auto px-4 z-10 py-20 ${isFullScreen ? "fixed inset-0 z-50 bg-black" : ""}`}>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
-          <motion.div
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8 }}
-            className="space-y-8"
-          >
-            <div className="inline-block px-4 py-1.5 rounded-full bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-700/50">
-              <span className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
-                The Future of Web3 Trading
-              </span>
-            </div>
-            <h1 className="text-4xl md:text-6xl font-bold leading-tight">
-              <span className="block">Trade Smarter with</span>
-              <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400">
-                Next-Gen Crypto
-              </span>
-            </h1>
-            <p className="text-xl text-gray-300 max-w-lg">
-              Experience lightning-fast trades, minimal fees, and advanced analytics on our decentralized trading
-              platform.
-            </p>
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full px-8 py-6 shadow-glow-purple">
-                Start Trading
-              </Button>
-              <Button variant="outline" className="rounded-full px-8 py-6 border-purple-500/50 hover:bg-purple-900/20">
-                Explore Features <ArrowRight className="ml-2 h-4 w-4" />
-              </Button>
-            </div>
-            <div className="flex items-center space-x-4 text-sm text-gray-400">
-              <div className="flex -space-x-2">
-                {[1, 2].map((i) => (
-                  <img
-                    key={i}
-                    src={`/${i}.svg`}
-                    alt={`Image ${i}`}
-                    className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 border-2 border-black"
-                  />
-                ))}
+      <div
+        className={`${
+          isFullScreen ? "fixed inset-0 z-50 bg-black" : "container mx-auto px-4 z-10 py-20"
+        }`}
+        style={isFullScreen ? { width: "100vw", height: "100vh", padding: 0, margin: 0 } : {}}
+      >
+        <div className={`grid ${isFullScreen ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2"} gap-12 items-center`}>
+          {!isFullScreen && (
+            <motion.div
+              initial={{ opacity: 0, x: -50 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8 }}
+              className="space-y-8"
+            >
+              <div className="inline-block px-4 py-1.5 rounded-full bg-gradient-to-r from-purple-900/30 to-pink-900/30 border border-purple-700/50">
+                <span className="text-sm font-medium bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
+                  The Future of Web3 Trading
+                </span>
               </div>
-              <span>+10k traders joined this month</span>
-            </div>
-          </motion.div>
+              <h1 className="text-4xl md:text-6xl font-bold leading-tight">
+                <span className="block">Trade Smarter with</span>
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-purple-500 via-pink-500 to-cyan-400">
+                  Next-Gen Crypto
+                </span>
+              </h1>
+              <p className="text-xl text-gray-300 max-w-lg">
+                Experience lightning-fast trades, minimal fees, and advanced analytics on our decentralized trading
+                platform.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4">
+                <Button className="bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white rounded-full px-8 py-6 shadow-glow-purple">
+                  Start Trading
+                </Button>
+                <Button variant="outline" className="rounded-full px-8 py-6 border-purple-500/50 hover:bg-purple-900/20">
+                  Explore Features <ArrowRight className="ml-2 h-4 w-4" />
+                </Button>
+              </div>
+              <div className="flex items-center space-x-4 text-sm text-gray-400">
+                <div className="flex -space-x-2">
+                  {[1, 2].map((i) => (
+                    <img
+                      key={i}
+                      src={`/${i}.svg`}
+                      alt={`Image ${i}`}
+                      className="w-8 h-8 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 border-2 border-black"
+                    />
+                  ))}
+                </div>
+                <span>+10k traders joined this month</span>
+              </div>
+            </motion.div>
+          )}
 
           <motion.div
             initial={{ opacity: 0, scale: 0.8 }}
