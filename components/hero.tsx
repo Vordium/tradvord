@@ -253,7 +253,7 @@ export default function Hero() {
           >
             <div
               className={`relative bg-gradient-to-r from-purple-900/40 to-pink-900/40 backdrop-blur-xl border border-purple-500/30 p-6 shadow-2xl ${
-                isFullScreen ? "rounded-none" : "rounded-3xl"
+                isFullScreen ? "rounded-none" : "rounded-b-3xl"
               }`}
             >
               <div className="relative z-10">
@@ -278,12 +278,12 @@ export default function Hero() {
                   ref={chartContainerRef}
                   className={`relative ${
                     isFullScreen ? "h-full w-full" : "h-64"
-                  } overflow-hidden ${isFullScreen ? "rounded-none" : "rounded-3xl"}`}
+                  } overflow-hidden ${isFullScreen ? "rounded-none" : "rounded-b-3xl"}`}
                   style={
                     isFullScreen
                       ? {
-                          height: "calc(100vh - 60px)", // Equal margin from top, bottom, left, and right
-                          width: "calc(100vw - 60px)",
+                          height: "calc(100vh - 30px)", // Prevent exceeding the screen from the bottom
+                          width: "calc(100vw - 60px)", // Maintain equal margin on all sides
                           margin: "30px auto", // Center the chart
                           overflow: "hidden",
                         }
