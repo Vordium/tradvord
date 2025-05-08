@@ -9,6 +9,9 @@ export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const chartContainerRef = useRef<HTMLDivElement>(null)
   const [isFullScreen, setIsFullScreen] = useState(false)
+  const [prices, setPrices] = useState({ BTC: "Loading...", ETH: "Loading..." })
+  const [btcVolume, setBtcVolume] = useState("Loading...")
+  const [totalMarketCap, setTotalMarketCap] = useState("Loading...")
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -80,6 +83,27 @@ export default function Hero() {
 
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
+  useEffect(() => {
+    const fetchMarketData = async () => {
+      try {
+        const response = await fetch(
+          "https://api.coingecko.com/api/v3/global"
+        )
+        const data = await response.json()
+        setPrices({
+          BTC: `$${data.data.market_cap_percentage.btc.toFixed(2)}%`,
+          ETH: `$${data.data.market_cap_percentage.eth.toFixed(2)}%`
+        })
+        setBtcVolume(`$${(data.data.total_volume.usd / 1e9).toFixed(2)}B`)
+        setTotalMarketCap(`$${(data.data.total_market_cap.usd / 1e12).toFixed(2)}T`)
+      } catch (error) {
+        console.error("Error fetching market data:", error)
+      }
+    }
+
+    fetchMarketData()
   }, [])
 
   useEffect(() => {
@@ -225,6 +249,50 @@ export default function Hero() {
             </div>
           </motion.div>
         </div>
+
+        {/* Portfolio Section */}
+        {!isFullScreen && (
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20">
+              <div className="text-sm text-gray-400">ETH/USD</div>
+              <div className="text-xl font-bold text-white">{prices.ETH}</div>
+            </div>
+            <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20">
+              <div className="text-sm text-gray-400">BTC Volume (24h)</div>
+              <div className="text-xl font-bold text-white">{btcVolume}</div>
+            </div>
+            <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20">
+              <div className="text-sm text-gray-400">Total Market Cap</div>
+              <div className="text-xl font-bold text-white">{totalMarketCap}</div>
+            </div>
+            <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20 col-span-1 md:col-span-3">
+              <div className="flex justify-between items-center">
+                <div className="text-sm text-gray-400">Your Portfolio</div>
+                <div className="text-sm text-purple-400">View All</div>
+              </div>
+              <div className="mt-2 space-y-2">
+                {[
+                  { coin: "BTC", amount: "1.2", value: "$45,230", change: "+2.4%" },
+                  { coin: "ETH", amount: "15.8", value: "$32,180", change: "+5.1%" },
+                ].map((item, index) => (
+                  <div key={index} className="flex justify-between items-center">
+                    <div className="flex items-center">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 mr-2"></div>
+                      <div>
+                        <div className="text-white">{item.coin}</div>
+                        <div className="text-xs text-gray-400">{item.amount}</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-white">{item.value}</div>
+                      <div className="text-xs text-green-400">{item.change}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </section>
   )
