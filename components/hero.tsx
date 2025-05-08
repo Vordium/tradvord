@@ -3,13 +3,16 @@
 import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { ArrowRight, Maximize2, Minimize2 } from "lucide-react" // Import icons for fullscreen toggle
+import { ArrowRight, Maximize2, Minimize2 } from "lucide-react"
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const chartContainerRef = useRef<HTMLDivElement>(null)
   const [isFullScreen, setIsFullScreen] = useState(false)
   const [portfolio, setPortfolio] = useState<{ coin: string; amount: number; price: string }[]>([])
+  const [ethPrice, setEthPrice] = useState("Loading...")
+  const [btcVolume, setBtcVolume] = useState("Loading...")
+  const [totalMarketCap, setTotalMarketCap] = useState("Loading...")
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -81,6 +84,24 @@ export default function Hero() {
 
     window.addEventListener("resize", handleResize)
     return () => window.removeEventListener("resize", handleResize)
+  }, [])
+
+  useEffect(() => {
+    const fetchMarketData = async () => {
+      try {
+        const response = await fetch("https://api.coingecko.com/api/v3/global")
+        const data = await response.json()
+        setEthPrice(`$${data.data.market_cap_percentage.eth.toFixed(2)}%`)
+        setBtcVolume(`$${(data.data.total_volume.usd / 1e9).toFixed(2)}B`)
+        setTotalMarketCap(`$${(data.data.total_market_cap.usd / 1e12).toFixed(2)}T`)
+      } catch (error) {
+        console.error("Error fetching market data:", error)
+      }
+    }
+
+    fetchMarketData()
+    const interval = setInterval(fetchMarketData, 60000) // Update every 60 seconds
+    return () => clearInterval(interval)
   }, [])
 
   useEffect(() => {
@@ -241,9 +262,9 @@ export default function Hero() {
                     className="px-3 py-1 rounded-full text-sm bg-gray-700 text-gray-300 flex items-center"
                   >
                     {isFullScreen ? (
-                      <Minimize2 className="h-5 w-5" /> // Icon for exiting fullscreen
+                      <Minimize2 className="h-5 w-5" />
                     ) : (
-                      <Maximize2 className="h-5 w-5" /> // Icon for expanding fullscreen
+                      <Maximize2 className="h-5 w-5" />
                     )}
                   </button>
                 </div>
@@ -257,9 +278,9 @@ export default function Hero() {
                   style={
                     isFullScreen
                       ? {
-                          height: "calc(100vh - 40px)", // Double the bottom margin
-                          width: "calc(100vw - 40px)", // Maintain equal margin on both sides
-                          margin: "40px auto", // Center the chart with margins
+                          height: "calc(100vh - 40px)",
+                          width: "calc(100vw - 40px)",
+                          margin: "40px auto",
                           overflow: "hidden",
                         }
                       : {}
@@ -273,24 +294,46 @@ export default function Hero() {
         {/* Portfolio Section */}
         {!isFullScreen && (
           <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-            {portfolio.map((item) => (
-              <div
-                key={item.coin}
-                className="bg-black/50 rounded-xl p-4 border border-purple-500/20 flex justify-between items-center"
-              >
-                <div>
-                  <div className="text-white">{item.coin.toUpperCase()}</div>
-                  <div className="text-sm text-gray-400">Amount: {item.amount}</div>
-                  <div className="text-sm text-gray-400">Price: {item.price}</div>
-                </div>
-                <Button
-                  onClick={() => removeFromPortfolio(item.coin)}
-                  className="bg-red-600 text-white text-sm px-4 py-2"
-                >
-                  Remove
-                </Button>
+            <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20">
+              <div className="text-sm text-gray-400">ETH Price</div>
+              <div className="text-xl font-bold text-white">{ethPrice}</div>
+            </div>
+            <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20">
+              <div className="text-sm text-gray-400">BTC Volume (24h)</div>
+              <div className="text-xl font-bold text-white">{btcVolume}</div>
+            </div>
+            <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20">
+              <div className="text-sm text-gray-400">Total Market Cap</div>
+              <div className="text-xl font-bold text-white">{totalMarketCap}</div>
+            </div>
+            <div className="bg-black/50 rounded-xl p-4 border border-purple-500/20 col-span-1 md:col-span-3">
+              <div className="flex justify-between items-center">
+                <div className="text-sm text-gray-400">Your Portfolio</div>
+                <div className="text-sm text-purple-400">View All</div>
               </div>
-            ))}
+              <div className="mt-2 space-y-2">
+                {portfolio.map((item) => (
+                  <div key={item.coin} className="flex justify-between items-center">
+                    <div className="flex items-center">
+                      <div className="w-6 h-6 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 mr-2"></div>
+                      <div>
+                        <div className="text-white">{item.coin.toUpperCase()}</div>
+                        <div className="text-xs text-gray-400">Amount: {item.amount}</div>
+                      </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-white">{item.price}</div>
+                      <Button
+                        onClick={() => removeFromPortfolio(item.coin)}
+                        className="bg-red-600 text-white text-sm px-4 py-2"
+                      >
+                        Remove
+                      </Button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         )}
       </div>
