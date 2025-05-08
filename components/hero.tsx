@@ -9,13 +9,6 @@ export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const chartContainerRef = useRef<HTMLDivElement>(null)
   const [isFullScreen, setIsFullScreen] = useState(false)
-  const [prices, setPrices] = useState({ BTC: "Loading...", ETH: "Loading..." })
-  const [btcVolume, setBtcVolume] = useState("Loading...")
-  const [totalMarketCap, setTotalMarketCap] = useState("Loading...")
-  const [portfolio, setPortfolio] = useState<{ coin: string; amount: number }[]>([])
-  const [searchQuery, setSearchQuery] = useState("")
-  const [searchResults, setSearchResults] = useState<{ id: string; symbol: string; name: string }[]>([])
-  const [walletConnected, setWalletConnected] = useState(false)
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -90,27 +83,6 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    const fetchMarketData = async () => {
-      try {
-        const response = await fetch(
-          "https://api.coingecko.com/api/v3/global"
-        )
-        const data = await response.json()
-        setPrices({
-          BTC: `$${data.data.market_cap_percentage.btc.toFixed(2)}%`,
-          ETH: `$${data.data.market_cap_percentage.eth.toFixed(2)}%`
-        })
-        setBtcVolume(`$${(data.data.total_volume.usd / 1e9).toFixed(2)}B`)
-        setTotalMarketCap(`$${(data.data.total_market_cap.usd / 1e12).toFixed(2)}T`)
-      } catch (error) {
-        console.error("Error fetching market data:", error)
-      }
-    }
-
-    fetchMarketData()
-  }, [])
-
-  useEffect(() => {
     if (!chartContainerRef.current) {
       console.error("Chart container is not initialized.")
       return
@@ -154,34 +126,6 @@ export default function Hero() {
 
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen)
-  }
-
-  const handleSearch = async () => {
-    if (!searchQuery) return
-    try {
-      const response = await fetch(
-        `https://api.coingecko.com/api/v3/search?query=${searchQuery}`
-      )
-      const data = await response.json()
-      setSearchResults(data.coins)
-    } catch (error) {
-      console.error("Error searching coins:", error)
-    }
-  }
-
-  const addToPortfolio = (coin: { id: string; symbol: string; name: string }) => {
-    if (portfolio.find((item) => item.coin === coin.id)) return
-    setPortfolio([...portfolio, { coin: coin.id, amount: 0 }])
-  }
-
-  const removeFromPortfolio = (coinId: string) => {
-    setPortfolio(portfolio.filter((item) => item.coin !== coinId))
-  }
-
-  const connectWallet = () => {
-    // Simulate wallet connection
-    setWalletConnected(true)
-    alert("Wallet connected! Portfolio preferences will be saved.")
   }
 
   return (
@@ -281,68 +225,6 @@ export default function Hero() {
             </div>
           </motion.div>
         </div>
-
-        {/* Portfolio Section */}
-        {!isFullScreen && (
-          <div className="mt-8">
-            <div className="flex justify-between items-center mb-4">
-              <div className="text-lg font-bold text-white">Your Portfolio</div>
-              <Button onClick={connectWallet} className="bg-purple-600 text-white">
-                {walletConnected ? "Wallet Connected" : "Connect Wallet"}
-              </Button>
-            </div>
-            <div className="mb-4">
-              <input
-                type="text"
-                placeholder="Search for coins..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full p-2 rounded-md border border-gray-700 bg-gray-800 text-white"
-              />
-              <Button onClick={handleSearch} className="mt-2 bg-purple-600 text-white">
-                Search
-              </Button>
-            </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-              {searchResults.map((coin) => (
-                <div
-                  key={coin.id}
-                  className="bg-black/50 rounded-xl p-4 border border-purple-500/20 flex justify-between items-center"
-                >
-                  <div>
-                    <div className="text-white">{coin.name}</div>
-                    <div className="text-sm text-gray-400">{coin.symbol.toUpperCase()}</div>
-                  </div>
-                  <Button
-                    onClick={() => addToPortfolio(coin)}
-                    className="bg-purple-600 text-white text-sm px-4 py-2"
-                  >
-                    Add
-                  </Button>
-                </div>
-              ))}
-            </div>
-            <div className="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4">
-              {portfolio.map((item) => (
-                <div
-                  key={item.coin}
-                  className="bg-black/50 rounded-xl p-4 border border-purple-500/20 flex justify-between items-center"
-                >
-                  <div>
-                    <div className="text-white">{item.coin.toUpperCase()}</div>
-                    <div className="text-sm text-gray-400">Amount: {item.amount}</div>
-                  </div>
-                  <Button
-                    onClick={() => removeFromPortfolio(item.coin)}
-                    className="bg-red-600 text-white text-sm px-4 py-2"
-                  >
-                    Remove
-                  </Button>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
       </div>
     </section>
   )
