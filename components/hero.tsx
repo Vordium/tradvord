@@ -1,37 +1,14 @@
 "use client"
 
-import { useEffect, useRef, useState, Fragment } from "react"
+import { useEffect, useRef, useState } from "react"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight } from "lucide-react"
-import { Menu, Transition } from "@headlessui/react"
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const chartContainerRef = useRef<HTMLDivElement>(null)
   const [isFullScreen, setIsFullScreen] = useState(false)
-  const [timeRange, setTimeRange] = useState("7") // Default to 7 days (1 week)
-
-  const timeRanges = [
-    { label: "1M", value: "30" },
-    { label: "1W", value: "7" },
-    { label: "1D", value: "1" },
-    { label: "12H", value: "0.5" },
-    { label: "4H", value: "0.1667" },
-    { label: "1H", value: "0.0417" },
-    { label: "30min", value: "0.0208" },
-    { label: "15min", value: "0.0104" },
-    { label: "5min", value: "0.0035" },
-    { label: "1min", value: "0.0017" },
-  ]
-
-  const mainTimeRanges = timeRanges.filter((range) =>
-    ["1D", "12H", "4H", "1H", "30min", "15min", "5min"].includes(range.label)
-  )
-
-  const dropdownTimeRanges = timeRanges.filter((range) =>
-    ["1M", "1W", "1min"].includes(range.label)
-  )
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -154,7 +131,7 @@ export default function Hero() {
   return (
     <section className="relative min-h-screen flex items-center pt-20">
       <canvas ref={canvasRef} className="absolute inset-0 z-0" style={{ pointerEvents: "none" }} />
-      <div className="container mx-auto px-4 z-10 py-20">
+      <div className={`container mx-auto px-4 z-10 py-20 ${isFullScreen ? "fixed inset-0 z-50 bg-black" : ""}`}>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -204,9 +181,8 @@ export default function Hero() {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className={`relative ${isFullScreen ? "fixed inset-0 z-50 bg-black" : ""}`}
+            className="relative"
           >
-            <div className="absolute inset-0 bg-gradient-to-r from-purple-500/20 to-pink-500/20 rounded-3xl blur-3xl"></div>
             <div className="relative bg-gradient-to-r from-purple-900/40 to-pink-900/40 backdrop-blur-xl rounded-3xl border border-purple-500/30 p-6 shadow-2xl">
               <div className="relative z-10">
                 <div className="flex justify-between items-center mb-6">
@@ -221,58 +197,10 @@ export default function Hero() {
                   </button>
                 </div>
 
-                <div className="flex flex-wrap items-center space-x-2 mb-6">
-                  {mainTimeRanges.map((range) => (
-                    <button
-                      key={range.value}
-                      onClick={() => setTimeRange(range.value)}
-                      className={`px-3 py-1 rounded-full text-sm ${
-                        timeRange === range.value
-                          ? "bg-purple-500 text-white"
-                          : "bg-gray-700 text-gray-300"
-                      }`}
-                    >
-                      {range.label}
-                    </button>
-                  ))}
-
-                  <Menu as="div" className="relative inline-block text-left">
-                    <Menu.Button className="px-3 py-1 rounded-full text-sm bg-gray-700 text-gray-300">
-                      More
-                    </Menu.Button>
-                    <Transition
-                      as={Fragment}
-                      enter="transition ease-out duration-100"
-                      enterFrom="transform opacity-0 scale-95"
-                      enterTo="transform opacity-100 scale-100"
-                      leave="transition ease-in duration-75"
-                      leaveFrom="transform opacity-100 scale-100"
-                      leaveTo="transform opacity-0 scale-95"
-                    >
-                      <Menu.Items className="absolute mt-2 w-28 rounded-md shadow-lg bg-gray-800 ring-1 ring-black ring-opacity-5 focus:outline-none">
-                        {dropdownTimeRanges.map((range) => (
-                          <Menu.Item key={range.value}>
-                            {({ active }) => (
-                              <button
-                                onClick={() => setTimeRange(range.value)}
-                                className={`${
-                                  active ? "bg-purple-500 text-white" : "text-gray-300"
-                                } group flex w-full items-center px-3 py-2 text-sm`}
-                              >
-                                {range.label}
-                              </button>
-                            )}
-                          </Menu.Item>
-                        ))}
-                      </Menu.Items>
-                    </Transition>
-                  </Menu>
-                </div>
-
                 <div
                   id="tradingview_chart"
                   ref={chartContainerRef}
-                  className={`relative ${isFullScreen ? "h-full" : "h-64"} overflow-hidden`}
+                  className={`relative ${isFullScreen ? "h-full w-full" : "h-64"} overflow-hidden`}
                 ></div>
               </div>
             </div>
