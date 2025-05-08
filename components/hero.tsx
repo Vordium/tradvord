@@ -172,7 +172,7 @@ export default function Hero() {
         className={`${
           isFullScreen ? "fixed inset-0 z-50 bg-black overflow-hidden" : "container mx-auto px-4 z-10 py-20"
         }`}
-        style={isFullScreen ? { width: "100vw", height: "100vh", padding: 0, margin: 0 } : {}}
+        style={isFullScreen ? { width: "100vw", height: "calc(100vh - 20px)", padding: 0, margin: "0 auto" } : {}}
       >
         <div className={`grid ${isFullScreen ? "grid-cols-1" : "grid-cols-1 lg:grid-cols-2"} gap-12 items-center`}>
           {!isFullScreen && (
