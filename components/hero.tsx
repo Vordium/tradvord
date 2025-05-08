@@ -190,7 +190,7 @@ export default function Hero() {
             transition={{ duration: 0.8, delay: 0.2 }}
             className="relative"
           >
-            <div className="relative bg-gradient-to-r from-purple-900/40 to-pink-900/40 backdrop-blur-xl rounded-3xl border border-purple-500/30 p-6 shadow-2xl">
+            <div className="relative bg-gradient-to-r from-purple-900/40 to-pink-900/40 backdrop-blur-xl border border-purple-500/30 p-6 shadow-2xl">
               <div className="relative z-10">
                 <div className="flex justify-between items-center mb-6">
                   <div className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-400 to-pink-400">
@@ -207,13 +207,15 @@ export default function Hero() {
                 <div
                   id="tradingview_chart"
                   ref={chartContainerRef}
-                  className={`relative ${isFullScreen ? "h-full w-full" : "h-64"} overflow-hidden`}
+                  className={`relative ${
+                    isFullScreen ? "h-full w-full" : "h-64"
+                  } overflow-hidden ${isFullScreen ? "rounded-none" : "rounded-3xl"}`}
                   style={
                     isFullScreen
                       ? {
-                          height: "100vh",
+                          height: "calc(100vh - 40px)", // Maintain bottom margin
                           width: "calc(100vw - 40px)", // Maintain equal margin on both sides
-                          margin: "0 auto", // Center the chart
+                          margin: "20px auto", // Center the chart with margins
                           overflow: "hidden",
                         }
                       : {}
