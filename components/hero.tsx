@@ -133,7 +133,7 @@ export default function Hero() {
       <canvas ref={canvasRef} className="absolute inset-0 z-0" style={{ pointerEvents: "none" }} />
       <div
         className={`${
-          isFullScreen ? "fixed inset-0 z-50 bg-black" : "container mx-auto px-4 z-10 py-20"
+          isFullScreen ? "fixed inset-0 z-50 bg-black overflow-hidden" : "container mx-auto px-4 z-10 py-20"
         }`}
         style={isFullScreen ? { width: "100vw", height: "100vh", padding: 0, margin: 0 } : {}}
       >
@@ -208,7 +208,16 @@ export default function Hero() {
                   id="tradingview_chart"
                   ref={chartContainerRef}
                   className={`relative ${isFullScreen ? "h-full w-full" : "h-64"} overflow-hidden`}
-                  style={isFullScreen ? { height: "100vh", width: "100vw" } : {}}
+                  style={
+                    isFullScreen
+                      ? {
+                          height: "100vh",
+                          width: "calc(100vw - 20px)", // Maintain margin from the right
+                          margin: "0 auto", // Center the chart
+                          overflow: "hidden",
+                        }
+                      : {}
+                  }
                 ></div>
               </div>
             </div>
