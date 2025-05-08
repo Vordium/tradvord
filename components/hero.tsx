@@ -212,7 +212,7 @@ export default function Hero() {
                     isFullScreen
                       ? {
                           height: "100vh",
-                          width: "calc(100vw - 20px)", // Maintain margin from the right
+                          width: "calc(100vw - 40px)", // Maintain equal margin on both sides
                           margin: "0 auto", // Center the chart
                           overflow: "hidden",
                         }
