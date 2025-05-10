@@ -1,7 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
-import { createChart, IChartApi } from "lightweight-charts" // Import Lightweight Charts
+import { createChart, IChartApi } from "lightweight-charts" // Ensure correct import
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Maximize2, Minimize2 } from "lucide-react"
@@ -15,6 +15,9 @@ export default function Hero() {
   const [ethPrice, setEthPrice] = useState("Loading...")
   const [btcVolume, setBtcVolume] = useState("Loading...")
   const [totalMarketCap, setTotalMarketCap] = useState("Loading...")
+  const [orderType, setOrderType] = useState<"buy" | "sell">("buy")
+  const [price, setPrice] = useState("")
+  const [amount, setAmount] = useState("")
 
   useEffect(() => {
     const canvas = canvasRef.current
@@ -109,9 +112,10 @@ export default function Hero() {
   useEffect(() => {
     if (!chartContainerRef.current) return
 
+    // Initialize the chart
     const chartInstance = createChart(chartContainerRef.current, {
       width: chartContainerRef.current.offsetWidth,
-      height: isFullScreen ? window.innerHeight - 30 : 300,
+      height: isFullScreen ? window.innerHeight - 200 : 300,
       layout: {
         backgroundColor: "#1A202C",
         textColor: "#FFFFFF",
@@ -131,6 +135,7 @@ export default function Hero() {
       },
     })
 
+    // Add candlestick series
     const candleSeries = chartInstance.addCandlestickSeries({
       upColor: "#4CAF50",
       downColor: "#F44336",
@@ -140,7 +145,7 @@ export default function Hero() {
       wickUpColor: "#4CAF50",
     })
 
-    // Fetch and set chart data (example data)
+    // Fetch and set chart data
     const fetchChartData = async () => {
       try {
         const response = await fetch("https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7")
@@ -161,6 +166,7 @@ export default function Hero() {
     fetchChartData()
     setChart(chartInstance)
 
+    // Cleanup on unmount
     return () => {
       chartInstance.remove()
     }
@@ -204,6 +210,16 @@ export default function Hero() {
 
   const removeFromPortfolio = (coin: string) => {
     setPortfolio(portfolio.filter((item) => item.coin !== coin))
+  }
+
+  const handleOrderSubmit = () => {
+    if (!price || !amount) {
+      alert("Please enter both price and amount.")
+      return
+    }
+    alert(`Order placed: ${orderType.toUpperCase()} ${amount} at $${price}`)
+    setPrice("")
+    setAmount("")
   }
 
   return (
@@ -302,7 +318,7 @@ export default function Hero() {
                   style={
                     isFullScreen
                       ? {
-                          height: "calc(100vh - 30px)", // Prevent exceeding the screen from the bottom
+                          height: "calc(100vh - 200px)", // Adjust height for trading panel
                           width: "calc(100vw - 60px)", // Maintain equal margin on all sides
                           margin: "30px auto", // Center the chart
                           overflow: "hidden",
@@ -315,6 +331,53 @@ export default function Hero() {
             </div>
           </motion.div>
         </div>
+
+        {/* Trading Panel */}
+        {isFullScreen && (
+          <div className="bg-gray-900 p-6 rounded-t-3xl shadow-2xl mt-4">
+            <h2 className="text-lg font-bold text-white mb-4">Place Order</h2>
+            <div className="flex gap-4 mb-4">
+              <Button
+                onClick={() => setOrderType("buy")}
+                className={`px-4 py-2 rounded-full ${
+                  orderType === "buy" ? "bg-green-600 text-white" : "bg-gray-700 text-gray-300"
+                }`}
+              >
+                Buy
+              </Button>
+              <Button
+                onClick={() => setOrderType("sell")}
+                className={`px-4 py-2 rounded-full ${
+                  orderType === "sell" ? "bg-red-600 text-white" : "bg-gray-700 text-gray-300"
+                }`}
+              >
+                Sell
+              </Button>
+            </div>
+            <div className="flex flex-col gap-4">
+              <input
+                type="number"
+                placeholder="Price (USD)"
+                value={price}
+                onChange={(e) => setPrice(e.target.value)}
+                className="w-full p-3 rounded-md bg-gray-800 text-white border border-gray-600"
+              />
+              <input
+                type="number"
+                placeholder="Amount"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+                className="w-full p-3 rounded-md bg-gray-800 text-white border border-gray-600"
+              />
+              <Button
+                onClick={handleOrderSubmit}
+                className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white py-3 rounded-md"
+              >
+                Place Order
+              </Button>
+            </div>
+          </div>
+        )}
 
         {/* Portfolio Section */}
         {!isFullScreen && (
