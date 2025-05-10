@@ -15,47 +15,56 @@ export default function Hero() {
   const [orderBook, setOrderBook] = useState<{ price: number; amount: number; type: "buy" | "sell" }[]>([])
 
   useEffect(() => {
-    if (!chartContainerRef.current) return
+    if (!chartContainerRef.current) {
+      console.error("Chart container is not initialized.")
+      return
+    }
 
-    const chart = createChart(chartContainerRef.current, {
-      width: chartContainerRef.current.offsetWidth,
-      height: 400,
-      layout: {
-        backgroundColor: "#1A202C",
-        textColor: "#FFFFFF",
-      },
-      grid: {
-        vertLines: { color: "#2D3748" },
-        horzLines: { color: "#2D3748" },
-      },
-      crosshair: {
-        mode: 1,
-      },
-      priceScale: {
-        borderColor: "#2D3748",
-      },
-      timeScale: {
-        borderColor: "#2D3748",
-      },
-    })
+    console.log("Chart container ref:", chartContainerRef.current) // Debugging step
 
-    const candleSeries = chart.addCandlestickSeries({
-      upColor: "#4CAF50",
-      downColor: "#F44336",
-      borderDownColor: "#F44336",
-      borderUpColor: "#4CAF50",
-      wickDownColor: "#F44336",
-      wickUpColor: "#4CAF50",
-    })
+    try {
+      const chart = createChart(chartContainerRef.current, {
+        width: chartContainerRef.current.offsetWidth,
+        height: 400,
+        layout: {
+          backgroundColor: "#1A202C",
+          textColor: "#FFFFFF",
+        },
+        grid: {
+          vertLines: { color: "#2D3748" },
+          horzLines: { color: "#2D3748" },
+        },
+        crosshair: {
+          mode: 1,
+        },
+        priceScale: {
+          borderColor: "#2D3748",
+        },
+        timeScale: {
+          borderColor: "#2D3748",
+        },
+      })
 
-    // Example data
-    candleSeries.setData([
-      { time: "2023-01-01", open: 100, high: 110, low: 90, close: 105 },
-      { time: "2023-01-02", open: 105, high: 115, low: 95, close: 100 },
-    ])
+      const candleSeries = chart.addCandlestickSeries({
+        upColor: "#4CAF50",
+        downColor: "#F44336",
+        borderDownColor: "#F44336",
+        borderUpColor: "#4CAF50",
+        wickDownColor: "#F44336",
+        wickUpColor: "#4CAF50",
+      })
 
-    return () => {
-      chart.remove()
+      // Example data
+      candleSeries.setData([
+        { time: "2023-01-01", open: 100, high: 110, low: 90, close: 105 },
+        { time: "2023-01-02", open: 105, high: 115, low: 95, close: 100 },
+      ])
+
+      return () => {
+        chart.remove()
+      }
+    } catch (error) {
+      console.error("Error initializing chart:", error)
     }
   }, [])
 
