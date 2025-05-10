@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useRef, useState } from "react"
+import { createChart, IChartApi } from "lightweight-charts" // Import Lightweight Charts
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 import { ArrowRight, Maximize2, Minimize2 } from "lucide-react"
@@ -9,6 +10,7 @@ export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const chartContainerRef = useRef<HTMLDivElement>(null)
   const [isFullScreen, setIsFullScreen] = useState(false)
+  const [chart, setChart] = useState<IChartApi | null>(null)
   const [portfolio, setPortfolio] = useState<{ coin: string; amount: number; price: string }[]>([])
   const [ethPrice, setEthPrice] = useState("Loading...")
   const [btcVolume, setBtcVolume] = useState("Loading...")
@@ -105,46 +107,64 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    if (!chartContainerRef.current) {
-      console.error("Chart container is not initialized.")
-      return
-    }
+    if (!chartContainerRef.current) return
 
-    const initializeWidget = () => {
-      if (window.TradingView) {
-        new window.TradingView.widget({
-          container_id: chartContainerRef.current.id,
-          autosize: true,
-          symbol: "BTCUSD",
-          interval: "60", // Default to 1-hour interval
-          timezone: "Etc/UTC",
-          theme: "dark",
-          style: "1", // Candlestick chart
-          locale: "en",
-          toolbar_bg: "#1A202C",
-          enable_publishing: false,
-          allow_symbol_change: true,
-          studies: ["MACD@tv-basicstudies"], // Example indicator
-        })
-      } else {
-        console.error("TradingView widget is not available.")
+    const chartInstance = createChart(chartContainerRef.current, {
+      width: chartContainerRef.current.offsetWidth,
+      height: isFullScreen ? window.innerHeight - 30 : 300,
+      layout: {
+        backgroundColor: "#1A202C",
+        textColor: "#FFFFFF",
+      },
+      grid: {
+        vertLines: { color: "#2D3748" },
+        horzLines: { color: "#2D3748" },
+      },
+      crosshair: {
+        mode: 1, // Normal crosshair mode
+      },
+      priceScale: {
+        borderColor: "#2D3748",
+      },
+      timeScale: {
+        borderColor: "#2D3748",
+      },
+    })
+
+    const candleSeries = chartInstance.addCandlestickSeries({
+      upColor: "#4CAF50",
+      downColor: "#F44336",
+      borderDownColor: "#F44336",
+      borderUpColor: "#4CAF50",
+      wickDownColor: "#F44336",
+      wickUpColor: "#4CAF50",
+    })
+
+    // Fetch and set chart data (example data)
+    const fetchChartData = async () => {
+      try {
+        const response = await fetch("https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7")
+        const data = await response.json()
+        const formattedData = data.prices.map(([time, price]: [number, number]) => ({
+          time: Math.floor(time / 1000),
+          open: price,
+          high: price * 1.02,
+          low: price * 0.98,
+          close: price,
+        }))
+        candleSeries.setData(formattedData)
+      } catch (error) {
+        console.error("Error fetching chart data:", error)
       }
     }
 
-    if (window.TradingView) {
-      initializeWidget()
-    } else {
-      const script = document.createElement("script")
-      script.src = "https://s3.tradingview.com/tv.js"
-      script.async = true
-      script.onload = initializeWidget
-      document.body.appendChild(script)
+    fetchChartData()
+    setChart(chartInstance)
 
-      return () => {
-        document.body.removeChild(script)
-      }
+    return () => {
+      chartInstance.remove()
     }
-  }, [])
+  }, [isFullScreen])
 
   const toggleFullScreen = () => {
     setIsFullScreen(!isFullScreen)
