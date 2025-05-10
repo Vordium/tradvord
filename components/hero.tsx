@@ -20,12 +20,18 @@ export default function Hero() {
       return
     }
 
-    console.log("Chart container ref:", chartContainerRef.current) // Debugging step
+    // Ensure the container has valid dimensions
+    const containerWidth = chartContainerRef.current.offsetWidth
+    const containerHeight = 400
+    if (containerWidth === 0 || containerHeight === 0) {
+      console.error("Chart container has invalid dimensions.")
+      return
+    }
 
     try {
       const chart = createChart(chartContainerRef.current, {
-        width: chartContainerRef.current.offsetWidth,
-        height: 400,
+        width: containerWidth,
+        height: containerHeight,
         layout: {
           backgroundColor: "#1A202C",
           textColor: "#FFFFFF",
@@ -55,10 +61,16 @@ export default function Hero() {
       })
 
       // Example data
-      candleSeries.setData([
+      const chartData = [
         { time: "2023-01-01", open: 100, high: 110, low: 90, close: 105 },
         { time: "2023-01-02", open: 105, high: 115, low: 95, close: 100 },
-      ])
+      ]
+
+      if (chartData.length === 0) {
+        console.error("No data provided for the chart.")
+      } else {
+        candleSeries.setData(chartData)
+      }
 
       return () => {
         chart.remove()
@@ -123,6 +135,7 @@ export default function Hero() {
             <div
               ref={chartContainerRef}
               className="w-full h-full bg-gray-900 rounded-lg shadow-lg"
+              style={{ position: "relative", display: "block" }}
             ></div>
           </div>
 
