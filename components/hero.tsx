@@ -20,51 +20,45 @@ export default function Hero() {
       return
     }
 
-    console.log("Chart container ref:", chartContainerRef.current) // Debugging step
+    const chart = createChart(chartContainerRef.current, {
+      width: chartContainerRef.current.offsetWidth,
+      height: 400,
+      layout: {
+        backgroundColor: "#1A202C",
+        textColor: "#FFFFFF",
+      },
+      grid: {
+        vertLines: { color: "#2D3748" },
+        horzLines: { color: "#2D3748" },
+      },
+      crosshair: {
+        mode: 1,
+      },
+      priceScale: {
+        borderColor: "#2D3748",
+      },
+      timeScale: {
+        borderColor: "#2D3748",
+      },
+    })
 
-    try {
-      const chart = createChart(chartContainerRef.current, {
-        width: chartContainerRef.current.offsetWidth,
-        height: 400,
-        layout: {
-          backgroundColor: "#1A202C",
-          textColor: "#FFFFFF",
-        },
-        grid: {
-          vertLines: { color: "#2D3748" },
-          horzLines: { color: "#2D3748" },
-        },
-        crosshair: {
-          mode: 1,
-        },
-        priceScale: {
-          borderColor: "#2D3748",
-        },
-        timeScale: {
-          borderColor: "#2D3748",
-        },
-      })
+    const candleSeries = chart.addCandlestickSeries({
+      upColor: "#4CAF50",
+      downColor: "#F44336",
+      borderDownColor: "#F44336",
+      borderUpColor: "#4CAF50",
+      wickDownColor: "#F44336",
+      wickUpColor: "#4CAF50",
+    })
 
-      const candleSeries = chart.addCandlestickSeries({
-        upColor: "#4CAF50",
-        downColor: "#F44336",
-        borderDownColor: "#F44336",
-        borderUpColor: "#4CAF50",
-        wickDownColor: "#F44336",
-        wickUpColor: "#4CAF50",
-      })
+    // Example data
+    candleSeries.setData([
+      { time: "2023-01-01", open: 100, high: 110, low: 90, close: 105 },
+      { time: "2023-01-02", open: 105, high: 115, low: 95, close: 100 },
+    ])
 
-      // Example data
-      candleSeries.setData([
-        { time: "2023-01-01", open: 100, high: 110, low: 90, close: 105 },
-        { time: "2023-01-02", open: 105, high: 115, low: 95, close: 100 },
-      ])
-
-      return () => {
-        chart.remove()
-      }
-    } catch (error) {
-      console.error("Error initializing chart:", error)
+    return () => {
+      chart.remove()
     }
   }, [])
 
@@ -90,23 +84,20 @@ export default function Hero() {
   }
 
   return (
-    <section className="relative min-h-screen flex items-center pt-20">
+    <section className="relative min-h-screen flex flex-col items-center pt-20">
       <div
         className={`${
-          isFullScreen ? "fixed inset-0 z-50 bg-black overflow-auto" : "container mx-auto px-4 z-10 py-20"
+          isFullScreen ? "fixed inset-0 z-50 bg-black overflow-auto" : "container mx-auto z-10 py-20"
         }`}
         style={isFullScreen ? { width: "100vw", height: "100vh", padding: 0, margin: 0 } : {}}
       >
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Chart Section */}
           <div
-            className={`relative ${
-              isFullScreen ? "col-span-2" : "col-span-3"
-            } bg-gray-900 p-4 rounded-lg shadow-lg`}
+            className={`relative col-span-3 bg-gray-900 p-4 rounded-lg shadow-lg`}
             style={{
-              maxWidth: isFullScreen ? "90vw" : "100%",
-              maxHeight: isFullScreen ? "80vh" : "400px",
-              margin: "0 auto",
+              width: "100%",
+              height: isFullScreen ? "80vh" : "400px",
               border: "1px solid #4CAF50",
             }}
           >
@@ -125,7 +116,7 @@ export default function Hero() {
             </div>
             <div
               ref={chartContainerRef}
-              className="w-full h-[400px] bg-gray-900 rounded-lg shadow-lg"
+              className="w-full h-full bg-gray-900 rounded-lg shadow-lg"
             ></div>
           </div>
 
