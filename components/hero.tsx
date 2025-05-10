@@ -110,65 +110,73 @@ export default function Hero() {
   }, [])
 
   useEffect(() => {
-    if (!chartContainerRef.current) return
-
-    // Initialize the chart
-    const chartInstance = createChart(chartContainerRef.current, {
-      width: chartContainerRef.current.offsetWidth,
-      height: isFullScreen ? window.innerHeight - 200 : 300,
-      layout: {
-        backgroundColor: "#1A202C",
-        textColor: "#FFFFFF",
-      },
-      grid: {
-        vertLines: { color: "#2D3748" },
-        horzLines: { color: "#2D3748" },
-      },
-      crosshair: {
-        mode: 1, // Normal crosshair mode
-      },
-      priceScale: {
-        borderColor: "#2D3748",
-      },
-      timeScale: {
-        borderColor: "#2D3748",
-      },
-    })
-
-    // Add candlestick series
-    const candleSeries = chartInstance.addCandlestickSeries({
-      upColor: "#4CAF50",
-      downColor: "#F44336",
-      borderDownColor: "#F44336",
-      borderUpColor: "#4CAF50",
-      wickDownColor: "#F44336",
-      wickUpColor: "#4CAF50",
-    })
-
-    // Fetch and set chart data
-    const fetchChartData = async () => {
-      try {
-        const response = await fetch("https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7")
-        const data = await response.json()
-        const formattedData = data.prices.map(([time, price]: [number, number]) => ({
-          time: Math.floor(time / 1000),
-          open: price,
-          high: price * 1.02,
-          low: price * 0.98,
-          close: price,
-        }))
-        candleSeries.setData(formattedData)
-      } catch (error) {
-        console.error("Error fetching chart data:", error)
-      }
+    if (!chartContainerRef.current) {
+      console.error("Chart container is not initialized.")
+      return
     }
 
-    fetchChartData()
-    setChart(chartInstance)
+    console.log("Chart container ref:", chartContainerRef.current) // Debugging step
 
-    // Cleanup on unmount
-    return () => {
-      chartInstance.remove()
+    try {
+      const chartInstance = createChart(chartContainerRef.current, {
+        width: chartContainerRef.current.offsetWidth,
+        height: isFullScreen ? window.innerHeight - 200 : 300,
+        layout: {
+          backgroundColor: "#1A202C",
+          textColor: "#FFFFFF",
+        },
+        grid: {
+          vertLines: { color: "#2D3748" },
+          horzLines: { color: "#2D3748" },
+        },
+        crosshair: {
+          mode: 1, // Normal crosshair mode
+        },
+        priceScale: {
+          borderColor: "#2D3748",
+        },
+        timeScale: {
+          borderColor: "#2D3748",
+        },
+      })
+
+      // Add candlestick series
+      const candleSeries = chartInstance.addCandlestickSeries({
+        upColor: "#4CAF50",
+        downColor: "#F44336",
+        borderDownColor: "#F44336",
+        borderUpColor: "#4CAF50",
+        wickDownColor: "#F44336",
+        wickUpColor: "#4CAF50",
+      })
+
+      // Fetch and set chart data
+      const fetchChartData = async () => {
+        try {
+          const response = await fetch("https://api.coingecko.com/api/v3/coins/bitcoin/market_chart?vs_currency=usd&days=7")
+          const data = await response.json()
+          const formattedData = data.prices.map(([time, price]: [number, number]) => ({
+            time: Math.floor(time / 1000),
+            open: price,
+            high: price * 1.02,
+            low: price * 0.98,
+            close: price,
+          }))
+          candleSeries.setData(formattedData)
+        } catch (error) {
+          console.error("Error fetching chart data:", error)
+        }
+      }
+
+      fetchChartData()
+      setChart(chartInstance)
+
+      // Cleanup on unmount
+      return () => {
+        chartInstance.remove()
+      }
+    } catch (error) {
+      console.error("Error initializing chart:", error)
     }
   }, [isFullScreen])
 
