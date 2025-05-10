@@ -92,7 +92,17 @@ export default function Hero() {
       >
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Chart Section */}
-          <div className={`relative ${isFullScreen ? "col-span-2" : "col-span-3"} bg-gray-900 p-4 rounded-lg`}>
+          <div
+            className={`relative ${
+              isFullScreen ? "col-span-2" : "col-span-3"
+            } bg-gray-900 p-4 rounded-lg shadow-lg`}
+            style={{
+              maxWidth: isFullScreen ? "90vw" : "100%",
+              maxHeight: isFullScreen ? "80vh" : "400px",
+              margin: "0 auto",
+              border: "1px solid #4CAF50",
+            }}
+          >
             <div className="flex justify-between items-center mb-4">
               <h2 className="text-lg font-bold text-white">BTC/USD Chart</h2>
               <button
@@ -107,43 +117,50 @@ export default function Hero() {
               </button>
             </div>
             {chartData ? (
-              <Chart
-                type="line"
-                data={chartData}
-                options={{
-                  responsive: true,
-                  maintainAspectRatio: false,
-                  scales: {
-                    x: {
-                      type: "time", // Use time scale
-                      time: {
-                        unit: "day", // Display data by day
-                      },
-                      grid: {
-                        color: "#2D3748",
-                      },
-                      ticks: {
-                        color: "#FFFFFF",
-                      },
-                    },
-                    y: {
-                      grid: {
-                        color: "#2D3748",
-                      },
-                      ticks: {
-                        color: "#FFFFFF",
-                      },
-                    },
-                  },
+              <div
+                style={{
+                  height: isFullScreen ? "calc(80vh - 50px)" : "300px",
+                  width: "100%",
                 }}
-              />
+              >
+                <Chart
+                  type="line"
+                  data={chartData}
+                  options={{
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                      x: {
+                        type: "time", // Use time scale
+                        time: {
+                          unit: "day", // Display data by day
+                        },
+                        grid: {
+                          color: "#2D3748",
+                        },
+                        ticks: {
+                          color: "#FFFFFF",
+                        },
+                      },
+                      y: {
+                        grid: {
+                          color: "#2D3748",
+                        },
+                        ticks: {
+                          color: "#FFFFFF",
+                        },
+                      },
+                    },
+                  }}
+                />
+              </div>
             ) : (
               <div className="text-white text-center">Loading chart...</div>
             )}
           </div>
 
           {/* Order Book */}
-          <div className="bg-gray-900 p-4 rounded-lg">
+          <div className="bg-gray-900 p-4 rounded-lg shadow-lg">
             <h2 className="text-lg font-bold text-white mb-4">Order Book</h2>
             <div className="h-64 overflow-y-auto">
               {orderBook.length > 0 ? (
@@ -172,7 +189,7 @@ export default function Hero() {
           </div>
 
           {/* Order Placement */}
-          <div className="bg-gray-900 p-4 rounded-lg">
+          <div className="bg-gray-900 p-4 rounded-lg shadow-lg">
             <h2 className="text-lg font-bold text-white mb-4">Place Order</h2>
             <div className="flex gap-4 mb-4">
               <Button
