@@ -1,7 +1,16 @@
 "use client"
 
 import { useEffect, useState } from "react"
-import { Chart as ChartJS, CategoryScale, LinearScale, TimeScale, Tooltip, LineElement, PointElement } from "chart.js"
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  TimeScale,
+  Tooltip,
+  LineElement,
+  PointElement,
+} from "chart.js"
+import "chartjs-adapter-date-fns" // Import the date adapter
 import { Chart } from "react-chartjs-2"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
@@ -105,9 +114,9 @@ export default function Hero() {
                   maintainAspectRatio: false,
                   scales: {
                     x: {
-                      type: "time",
+                      type: "time", // Use time scale
                       time: {
-                        unit: "day",
+                        unit: "day", // Display data by day
                       },
                       grid: {
                         color: "#2D3748",
