@@ -9,6 +9,7 @@ import {
   Tooltip,
   LineElement,
   PointElement,
+  LineController, // Import LineController
 } from "chart.js"
 import "chartjs-adapter-date-fns" // Import the date adapter
 import { Chart } from "react-chartjs-2"
@@ -17,7 +18,7 @@ import { Button } from "@/components/ui/button"
 import { Maximize2, Minimize2 } from "lucide-react"
 
 // Register Chart.js components
-ChartJS.register(CategoryScale, LinearScale, TimeScale, Tooltip, LineElement, PointElement)
+ChartJS.register(CategoryScale, LinearScale, TimeScale, Tooltip, LineElement, PointElement, LineController)
 
 export default function Hero() {
   const [isFullScreen, setIsFullScreen] = useState(false)
