@@ -4,21 +4,20 @@ import { useEffect, useRef, useState } from "react"
 import { createChart } from "lightweight-charts"
 import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
-import { Maximize2, Minimize2 } from "lucide-react"
 
 export default function Hero() {
   const chartContainerRef = useRef<HTMLDivElement>(null)
-  const [isFullScreen, setIsFullScreen] = useState(false)
+  const [ethPrice, setEthPrice] = useState("Loading...")
+  const [btcPrice, setBtcPrice] = useState("Loading...")
+  const [totalMarketCap, setTotalMarketCap] = useState("Loading...")
+  const [portfolio, setPortfolio] = useState<{ coin: string; amount: number; price: string }[]>([])
 
   useEffect(() => {
-    if (!chartContainerRef.current) {
-      console.error("Chart container is not initialized.")
-      return
-    }
+    if (!chartContainerRef.current) return
 
     const chart = createChart(chartContainerRef.current, {
       width: chartContainerRef.current.offsetWidth,
-      height: 400,
+      height: 300,
       layout: {
         backgroundColor: "#1A202C",
         textColor: "#FFFFFF",
@@ -38,18 +37,16 @@ export default function Hero() {
       },
     })
 
-    const candleSeries = chart.addCandlestickSeries({
-      upColor: "#4CAF50",
-      downColor: "#F44336",
-      borderDownColor: "#F44336",
-      borderUpColor: "#4CAF50",
-      wickDownColor: "#F44336",
-      wickUpColor: "#4CAF50",
+    const lineSeries = chart.addLineSeries({
+      color: "#4CAF50",
+      lineWidth: 2,
     })
 
-    candleSeries.setData([
-      { time: "2023-01-01", open: 100, high: 110, low: 90, close: 105 },
-      { time: "2023-01-02", open: 105, high: 115, low: 95, close: 100 },
+    // Example data
+    lineSeries.setData([
+      { time: "2023-01-01", value: 100 },
+      { time: "2023-01-02", value: 105 },
+      { time: "2023-01-03", value: 102 },
     ])
 
     return () => {
@@ -57,45 +54,67 @@ export default function Hero() {
     }
   }, [])
 
-  const toggleFullScreen = () => {
-    setIsFullScreen(!isFullScreen)
-  }
+  useEffect(() => {
+    const fetchMarketData = async () => {
+      try {
+        const response = await fetch("https://api.coingecko.com/api/v3/global")
+        const data = await response.json()
+        setEthPrice(`$${data.data.market_cap_percentage.eth.toFixed(2)}%`)
+        setBtcPrice(`$${data.data.market_cap_percentage.btc.toFixed(2)}%`)
+        setTotalMarketCap(`$${(data.data.total_market_cap.usd / 1e12).toFixed(2)}T`)
+      } catch (error) {
+        console.error("Error fetching market data:", error)
+      }
+    }
+
+    fetchMarketData()
+  }, [])
 
   return (
     <section className="relative min-h-screen flex flex-col items-center pt-20">
-      <div
-        className={`${
-          isFullScreen ? "fixed inset-0 z-50 bg-black overflow-auto" : "container mx-auto z-10 py-20"
-        }`}
-        style={isFullScreen ? { width: "100vw", height: "100vh", padding: 0, margin: 0 } : {}}
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div
-            className={`relative col-span-3 bg-gray-900 p-4 rounded-lg shadow-lg`}
-            style={{
-              width: "100%",
-              height: isFullScreen ? "80vh" : "400px",
-              border: "1px solid #4CAF50",
-            }}
-          >
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-lg font-bold text-white">BTC/USD Chart</h2>
-              <button
-                onClick={toggleFullScreen}
-                className="px-3 py-1 rounded-[3px] text-sm bg-gradient-to-r from-gray-800 to-gray-900 text-gray-300 flex items-center border border-gray-500"
-              >
-                {isFullScreen ? (
-                  <Minimize2 className="h-5 w-5" />
-                ) : (
-                  <Maximize2 className="h-5 w-5" />
-                )}
-              </button>
-            </div>
-            <div
-              ref={chartContainerRef}
-              className="w-full h-full bg-gray-900 rounded-lg shadow-lg"
-            ></div>
+      <div className="container mx-auto px-4 py-20">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {/* BTC Price Card */}
+          <div className="bg-gray-900 p-4 rounded-lg shadow-lg">
+            <h2 className="text-lg font-bold text-white mb-2">BTC Price</h2>
+            <p className="text-xl text-green-500">{btcPrice}</p>
           </div>
+
+          {/* ETH Price Card */}
+          <div className="bg-gray-900 p-4 rounded-lg shadow-lg">
+            <h2 className="text-lg font-bold text-white mb-2">ETH Price</h2>
+            <p className="text-xl text-green-500">{ethPrice}</p>
+          </div>
+
+          {/* Total Market Cap Card */}
+          <div className="bg-gray-900 p-4 rounded-lg shadow-lg">
+            <h2 className="text-lg font-bold text-white mb-2">Total Market Cap</h2>
+            <p className="text-xl text-green-500">{totalMarketCap}</p>
+          </div>
+        </div>
+
+        {/* Chart Section */}
+        <div className="bg-gray-900 p-4 rounded-lg shadow-lg mt-8">
+          <h2 className="text-lg font-bold text-white mb-4">Market Chart</h2>
+          <div ref={chartContainerRef} className="w-full h-[300px]"></div>
+        </div>
+
+        {/* Portfolio Section */}
+        <div className="bg-gray-900 p-4 rounded-lg shadow-lg mt-8">
+          <h2 className="text-lg font-bold text-white mb-4">Your Portfolio</h2>
+          {portfolio.length > 0 ? (
+            <ul className="space-y-2">
+              {portfolio.map((item, index) => (
+                <li key={index} className="flex justify-between items-center">
+                  <span className="text-white">{item.coin.toUpperCase()}</span>
+                  <span className="text-gray-400">Amount: {item.amount}</span>
+                  <span className="text-green-500">{item.price}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p className="text-gray-500">No assets in your portfolio yet.</p>
+          )}
         </div>
       </div>
     </section>
