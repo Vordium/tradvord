@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState } from "react"
 import { createChart } from "lightweight-charts"
-import { motion } from "framer-motion"
 import { Button } from "@/components/ui/button"
 
 export default function Hero() {
@@ -13,44 +12,59 @@ export default function Hero() {
   const [portfolio, setPortfolio] = useState<{ coin: string; amount: number; price: string }[]>([])
 
   useEffect(() => {
-    if (!chartContainerRef.current) return
+    if (!chartContainerRef.current) {
+      console.error("Chart container is not initialized.")
+      return
+    }
 
-    const chart = createChart(chartContainerRef.current, {
-      width: chartContainerRef.current.offsetWidth,
-      height: 300,
-      layout: {
-        backgroundColor: "#1A202C",
-        textColor: "#FFFFFF",
-      },
-      grid: {
-        vertLines: { color: "#2D3748" },
-        horzLines: { color: "#2D3748" },
-      },
-      crosshair: {
-        mode: 1,
-      },
-      priceScale: {
-        borderColor: "#2D3748",
-      },
-      timeScale: {
-        borderColor: "#2D3748",
-      },
-    })
+    console.log("Chart container ref:", chartContainerRef.current)
 
-    const lineSeries = chart.addLineSeries({
-      color: "#4CAF50",
-      lineWidth: 2,
-    })
+    try {
+      const chart = createChart(chartContainerRef.current, {
+        width: chartContainerRef.current.offsetWidth,
+        height: 300,
+        layout: {
+          backgroundColor: "#1A202C",
+          textColor: "#FFFFFF",
+        },
+        grid: {
+          vertLines: { color: "#2D3748" },
+          horzLines: { color: "#2D3748" },
+        },
+        crosshair: {
+          mode: 1,
+        },
+        priceScale: {
+          borderColor: "#2D3748",
+        },
+        timeScale: {
+          borderColor: "#2D3748",
+        },
+      })
 
-    // Example data
-    lineSeries.setData([
-      { time: "2023-01-01", value: 100 },
-      { time: "2023-01-02", value: 105 },
-      { time: "2023-01-03", value: 102 },
-    ])
+      const lineSeries = chart.addLineSeries({
+        color: "#4CAF50",
+        lineWidth: 2,
+      })
 
-    return () => {
-      chart.remove()
+      // Example data
+      const chartData = [
+        { time: "2023-01-01", value: 100 },
+        { time: "2023-01-02", value: 105 },
+        { time: "2023-01-03", value: 102 },
+      ]
+
+      if (chartData.length === 0) {
+        console.error("No data provided for the chart.")
+      } else {
+        lineSeries.setData(chartData)
+      }
+
+      return () => {
+        chart.remove()
+      }
+    } catch (error) {
+      console.error("Error initializing chart:", error)
     }
   }, [])
 
